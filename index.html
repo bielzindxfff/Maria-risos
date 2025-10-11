@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Roleplay - Montes RP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
             --primary: #8A2BE2;
@@ -731,6 +733,22 @@
             gap: 10px;
             font-size: 0.9rem;
         }
+        
+        .email-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+        
+        .email-sent {
+            color: var(--success);
+        }
+        
+        .email-failed {
+            color: var(--danger);
+        }
     </style>
 </head>
 <body>
@@ -962,8 +980,19 @@
         // Configuração da senha de administrador
         const ADMIN_PASSWORD = "1319";
         
-        // URL do Google Apps Script (serviço gratuito do Google)
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwQ7X-8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8/exec';
+        // Configuração do EmailJS (serviço gratuito de envio de emails)
+        // Você precisa criar uma conta gratuita em https://www.emailjs.com/
+        // e substituir estas configurações pelas suas
+        const EMAILJS_CONFIG = {
+            SERVICE_ID: 'service_montes_rp', // Substitua pelo seu Service ID
+            TEMPLATE_ID: 'template_whitelist', // Substitua pelo seu Template ID
+            PUBLIC_KEY: 'your_public_key_here' // Substitua pela sua Public Key
+        };
+        
+        // Inicializar EmailJS
+        (function() {
+            emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+        })();
         
         // Elementos do DOM
         const formSection = document.getElementById('formSection');
@@ -1117,6 +1146,46 @@
                 confirmLogin.click();
             }
         });
+        
+        // Função para enviar email de whitelist
+        async function sendWhitelistEmail(playerEmail, playerName) {
+            try {
+                const templateParams = {
+                    to_email: playerEmail,
+                    player_name: playerName,
+                    to_name: playerName,
+                    reply_to: 'montesrp@email.com', // Substitua pelo email do Montes RP
+                    message: `
+📢 Parabéns! Você foi Whitelistado e agora está verificado para jogar em nosso RP! 🎉
+
+A partir de agora, você faz parte do servidor e pode aproveitar toda a experiência do roleplay. 🚗💬
+Lembre-se de seguir todas as regras do servidor elas existem para manter o jogo justo e divertido para todos.
+
+⚠️ Atenção: qualquer uso de cheats, exploits ou programas ilegais resultará na perda imediata da sua Whitelist e possíveis punições adicionais
+
+--
+Atenciosamente,
+Equipe Montes RP 🐉
+                    `
+                };
+                
+                const response = await emailjs.send(
+                    EMAILJS_CONFIG.SERVICE_ID,
+                    EMAILJS_CONFIG.TEMPLATE_ID,
+                    templateParams
+                );
+                
+                console.log('Email enviado com sucesso:', response);
+                return { success: true, message: 'Email enviado com sucesso!' };
+                
+            } catch (error) {
+                console.error('Erro ao enviar email:', error);
+                return { 
+                    success: false, 
+                    message: 'Erro ao enviar email: ' + (error.text || 'Falha na conexão')
+                };
+            }
+        }
         
         // Funções para interagir com o armazenamento compartilhado
         async function loadApplications() {
@@ -1407,6 +1476,9 @@
             // Detectar se é do mesmo dispositivo (simplificado)
             const isSameDevice = app.dispositivo && app.dispositivo.includes(navigator.userAgent.substring(0, 50));
             
+            // Verificar se já foi enviado email (para whitelistados)
+            const emailSent = app.emailSent || false;
+            
             appCard.innerHTML = `
                 <div class="application-header">
                     <div>
@@ -1417,6 +1489,12 @@
                         <div class="applicant-email" style="font-size: 0.8rem; color: #888;">
                             <i class="fas fa-desktop"></i> ${isSameDevice ? 'Este dispositivo' : 'Outro dispositivo'}
                         </div>
+                        ${app.status === 'whitelisted' ? `
+                        <div class="email-status ${emailSent ? 'email-sent' : 'email-failed'}">
+                            <i class="fas fa-${emailSent ? 'check' : 'exclamation-triangle'}"></i>
+                            ${emailSent ? 'Email de confirmação enviado' : 'Email de confirmação pendente'}
+                        </div>
+                        ` : ''}
                     </div>
                     <div>
                         <small>${app.data}</small>
@@ -1470,6 +1548,11 @@
                     <button class="action-btn whitelist-btn" onclick="whitelistPlayer('${app.id}')" ${app.status === 'whitelisted' ? 'disabled' : ''}>
                         <i class="fas fa-check-circle"></i> ${app.status === 'whitelisted' ? 'Já Whitelistado' : 'Whitelistado'}
                     </button>
+                    ${app.status === 'whitelisted' && !emailSent ? `
+                    <button class="action-btn" style="background: var(--accent); color: white;" onclick="resendEmail('${app.id}')">
+                        <i class="fas fa-paper-plane"></i> Reenviar Email
+                    </button>
+                    ` : ''}
                     <button class="action-btn remove-whitelist-btn" onclick="removeWhitelist('${app.id}')" ${app.status !== 'whitelisted' ? 'disabled' : ''}>
                         <i class="fas fa-times-circle"></i> Remover Whitelist
                     </button>
@@ -1496,16 +1579,60 @@
         // Whitelistar jogador
         async function whitelistPlayer(id) {
             try {
-                await updateApplication(id, { status: 'whitelisted' });
-                // Simular envio de email
                 const app = applications.find(a => a.id === id);
-                if (app) {
-                    sendWhitelistEmail(app.email, app.nome);
+                if (!app) {
+                    showToast('Inscrição não encontrada', 'danger');
+                    return;
                 }
+                
+                // Enviar email de confirmação
+                const emailResult = await sendWhitelistEmail(app.email, app.nome);
+                
+                // Atualizar status e marcar email como enviado
+                const updates = { 
+                    status: 'whitelisted',
+                    emailSent: emailResult.success,
+                    emailSentAt: new Date().toISOString()
+                };
+                
+                await updateApplication(id, updates);
                 renderApplications();
-                showToast('Jogador whitelistado e notificado por email!');
+                
+                if (emailResult.success) {
+                    showToast('Jogador whitelistado e email enviado com sucesso!');
+                } else {
+                    showToast('Jogador whitelistado, mas email não pôde ser enviado', 'warning');
+                }
+                
             } catch (error) {
                 showToast('Erro ao whitelistar jogador', 'danger');
+            }
+        }
+        
+        // Reenviar email
+        async function resendEmail(id) {
+            try {
+                const app = applications.find(a => a.id === id);
+                if (!app) {
+                    showToast('Inscrição não encontrada', 'danger');
+                    return;
+                }
+                
+                const emailResult = await sendWhitelistEmail(app.email, app.nome);
+                
+                if (emailResult.success) {
+                    await updateApplication(id, { 
+                        emailSent: true,
+                        emailSentAt: new Date().toISOString()
+                    });
+                    renderApplications();
+                    showToast('Email reenviado com sucesso!');
+                } else {
+                    showToast('Erro ao reenviar email: ' + emailResult.message, 'danger');
+                }
+                
+            } catch (error) {
+                showToast('Erro ao reenviar email', 'danger');
             }
         }
         
@@ -1518,14 +1645,6 @@
             } catch (error) {
                 showToast('Erro ao remover whitelist', 'danger');
             }
-        }
-        
-        // Simular envio de email
-        function sendWhitelistEmail(email, nome) {
-            // Em um ambiente real, isso seria uma chamada para um servidor
-            console.log(`Email enviado para: ${email}`);
-            console.log(`Assunto: Sua inscrição no Montes RP foi aprovada!`);
-            console.log(`Conteúdo: Olá ${nome}, sua inscrição no Montes RP foi aprovada! Agora você está whitelistado e pode entrar na cidade.`);
         }
         
         // Excluir inscrição
