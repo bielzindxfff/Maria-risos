@@ -561,6 +561,11 @@
             color: white;
         }
         
+        .whitelist-btn {
+            background: var(--success);
+            color: white;
+        }
+        
         .action-btn:hover {
             transform: translateY(-3px);
         }
@@ -584,6 +589,10 @@
         
         .status-viewed {
             background: var(--gradient-3);
+        }
+        
+        .status-whitelisted {
+            background: var(--success);
         }
         
         .floating-elements {
@@ -637,6 +646,10 @@
             h1 {
                 font-size: 2rem;
             }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
         }
         
         /* Pulse animation for new applications */
@@ -649,11 +662,41 @@
         .pulse {
             animation: pulse 2s infinite;
         }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--success);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
     <!-- Floating background elements -->
     <div class="floating-elements" id="floatingElements"></div>
+    
+    <!-- Toast notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMessage">Operação realizada com sucesso!</span>
+    </div>
     
     <div class="container">
         <header>
@@ -685,6 +728,21 @@
                     <div class="form-group">
                         <label for="email">E-mail <span class="required">*</span></label>
                         <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="discord">Nome no Discord <span class="required">*</span></label>
+                        <input type="text" id="discord" name="discord" required placeholder="Seu nome no Discord">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="discordId">ID do Discord <span class="required">*</span></label>
+                        <input type="text" id="discordId" name="discordId" required placeholder="Seu ID do Discord">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nickPlayer">Nick do Player <span class="required">*</span></label>
+                        <input type="text" id="nickPlayer" name="nickPlayer" required placeholder="Seu nick no jogo">
                     </div>
                 </div>
                 
@@ -757,13 +815,13 @@
                     <div class="form-group">
                         <label for="profissao">O que ele vai ser no RP? <span class="required">*</span></label>
                         <select id="profissao" name="profissao" required>
-                            <option value="">Selecione uma opção</option>
-                            <option value="Policial">Policial</option>
-                            <option value="Médico">Médico</option>
-                            <option value="Mecânico">Mecânico</option>
-                            <option value="Empresario">Empresário</option>
-                            <option value="Criador de Conteúdo">Criador de Conteúdo</option>
-                            <option value="Outros">Outros</option>
+                            <option value="" style="color: #888;">Selecione uma opção</option>
+                            <option value="Policial" style="color: white;">Policial</option>
+                            <option value="Médico" style="color: white;">Médico</option>
+                            <option value="Mecânico" style="color: white;">Mecânico</option>
+                            <option value="Empresario" style="color: white;">Empresário</option>
+                            <option value="Criador de Conteúdo" style="color: white;">Criador de Conteúdo</option>
+                            <option value="Outros" style="color: white;">Outros</option>
                         </select>
                     </div>
                     
@@ -790,6 +848,7 @@
                 <div class="tabs">
                     <div class="tab active" data-tab="all">Todas as Inscrições</div>
                     <div class="tab" data-tab="new">Novas <span id="newCount" class="status-badge status-new">0</span></div>
+                    <div class="tab" data-tab="whitelisted">Whitelistados <span id="whitelistedCount" class="status-badge status-whitelisted">0</span></div>
                 </div>
                 
                 <div class="tab-content active" id="tab-all">
@@ -806,6 +865,15 @@
                         <div class="no-applications">
                             <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
                             <p>Nenhuma nova inscrição.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="tab-whitelisted">
+                    <div class="applications-list" id="whitelistedApplicationsList">
+                        <div class="no-applications">
+                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                            <p>Nenhum jogador whitelistado ainda.</p>
                         </div>
                     </div>
                 </div>
@@ -841,8 +909,15 @@
         // Configuração da senha de administrador
         const ADMIN_PASSWORD = "1319";
         
-        // Armazenamento local para as inscrições
-        let applications = JSON.parse(localStorage.getItem('rpApplications')) || [];
+        // Simulação de banco de dados usando localStorage
+        // Em um ambiente real, isso seria substituído por um backend
+        function getApplications() {
+            return JSON.parse(localStorage.getItem('rpApplications')) || [];
+        }
+        
+        function saveApplications(applications) {
+            localStorage.setItem('rpApplications', JSON.stringify(applications));
+        }
         
         // Elementos do DOM
         const formSection = document.getElementById('formSection');
@@ -853,6 +928,7 @@
         const applicationsList = document.getElementById('applicationsList');
         const noApplications = document.getElementById('noApplications');
         const newApplicationsList = document.getElementById('newApplicationsList');
+        const whitelistedApplicationsList = document.getElementById('whitelistedApplicationsList');
         const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
         const loginModal = document.getElementById('loginModal');
@@ -861,7 +937,10 @@
         const cancelLogin = document.getElementById('cancelLogin');
         const confirmLogin = document.getElementById('confirmLogin');
         const newCount = document.getElementById('newCount');
+        const whitelistedCount = document.getElementById('whitelistedCount');
         const floatingElements = document.getElementById('floatingElements');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
         
         // Criar elementos flutuantes de fundo
         function createFloatingElements() {
@@ -876,6 +955,17 @@
                 element.style.background = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.1)`;
                 floatingElements.appendChild(element);
             }
+        }
+        
+        // Mostrar notificação toast
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.style.background = type === 'success' ? 'var(--success)' : 'var(--danger)';
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
         
         // Inicializar elementos flutuantes
@@ -908,6 +998,8 @@
                 // Renderizar aplicações se necessário
                 if (tabId === 'new') {
                     renderNewApplications();
+                } else if (tabId === 'whitelisted') {
+                    renderWhitelistedApplications();
                 }
             });
         });
@@ -935,7 +1027,7 @@
                 formSection.style.display = 'none';
                 adminPanel.style.display = 'block';
                 renderApplications();
-                updateNewCount();
+                updateCounts();
             } else {
                 // Senha incorreta
                 passwordError.style.display = 'block';
@@ -980,6 +1072,9 @@
                 id: Date.now(), // ID único baseado no timestamp
                 nome: formData.get('nome'),
                 email: formData.get('email'),
+                discord: formData.get('discord'),
+                discordId: formData.get('discordId'),
+                nickPlayer: formData.get('nickPlayer'),
                 rdm: formData.get('rdm'),
                 vdm: formData.get('vdm'),
                 darkrp: formData.get('darkrp'),
@@ -993,11 +1088,14 @@
                 status: 'new'
             };
             
+            // Obter aplicações existentes
+            const applications = getApplications();
+            
             // Adicionar à lista de inscrições
             applications.push(application);
             
             // Salvar no localStorage
-            localStorage.setItem('rpApplications', JSON.stringify(applications));
+            saveApplications(applications);
             
             // Limpar formulário
             this.reset();
@@ -1015,14 +1113,18 @@
             
             // Atualizar contador se estiver no painel admin
             if (adminPanel.style.display === 'block') {
-                updateNewCount();
+                updateCounts();
             }
         });
         
-        // Atualizar contador de novas inscrições
-        function updateNewCount() {
+        // Atualizar contadores
+        function updateCounts() {
+            const applications = getApplications();
             const newApplications = applications.filter(app => app.status === 'new');
+            const whitelistedApplications = applications.filter(app => app.status === 'whitelisted');
+            
             newCount.textContent = newApplications.length;
+            whitelistedCount.textContent = whitelistedApplications.length;
             
             // Adicionar efeito de pulso se houver novas inscrições
             if (newApplications.length > 0) {
@@ -1034,7 +1136,8 @@
         
         // Renderizar todas as inscrições
         function renderApplications() {
-            updateNewCount();
+            const applications = getApplications();
+            updateCounts();
             
             if (applications.length === 0) {
                 noApplications.style.display = 'block';
@@ -1047,76 +1150,14 @@
             applicationsList.innerHTML = '';
             
             applications.forEach(app => {
-                const appCard = document.createElement('div');
-                appCard.className = 'application-card';
-                
-                appCard.innerHTML = `
-                    <div class="application-header">
-                        <div>
-                            <div class="applicant-name">${app.nome}</div>
-                            <div class="applicant-email">${app.email}</div>
-                        </div>
-                        <div>
-                            <small>${app.data}</small>
-                            <span class="status-badge ${app.status === 'new' ? 'status-new' : 'status-viewed'}">
-                                ${app.status === 'new' ? 'NOVA' : 'VISTA'}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="application-details">
-                        <div class="detail-item">
-                            <div class="detail-label">RDM</div>
-                            <div class="detail-value">${app.rdm}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">VDM</div>
-                            <div class="detail-value">${app.vdm}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">DarkRP</div>
-                            <div class="detail-value">${app.darkrp}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">PG</div>
-                            <div class="detail-value">${app.pg}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">MT</div>
-                            <div class="detail-value">${app.mt}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">História do Personagem</div>
-                            <div class="detail-value">${app.historia}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Idade do Personagem</div>
-                            <div class="detail-value">${app.idade}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Profissão no RP</div>
-                            <div class="detail-value">${app.profissao}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Motivação</div>
-                            <div class="detail-value">${app.motivacao}</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn view-btn" onclick="markAsViewed(${app.id})" ${app.status === 'viewed' ? 'disabled' : ''}>
-                            <i class="fas fa-eye"></i> ${app.status === 'viewed' ? 'Já Visualizada' : 'Marcar como Vista'}
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deleteApplication(${app.id})">
-                            <i class="fas fa-trash"></i> Excluir
-                        </button>
-                    </div>
-                `;
-                
+                const appCard = createApplicationCard(app);
                 applicationsList.appendChild(appCard);
             });
         }
         
         // Renderizar apenas as novas inscrições
         function renderNewApplications() {
+            const applications = getApplications();
             const newApplications = applications.filter(app => app.status === 'new');
             
             if (newApplications.length === 0) {
@@ -1132,82 +1173,119 @@
             newApplicationsList.innerHTML = '';
             
             newApplications.forEach(app => {
-                const appCard = document.createElement('div');
-                appCard.className = 'application-card';
-                
-                appCard.innerHTML = `
-                    <div class="application-header">
-                        <div>
-                            <div class="applicant-name">${app.nome}</div>
-                            <div class="applicant-email">${app.email}</div>
-                        </div>
-                        <div>
-                            <small>${app.data}</small>
-                            <span class="status-badge status-new">NOVA</span>
-                        </div>
-                    </div>
-                    <div class="application-details">
-                        <div class="detail-item">
-                            <div class="detail-label">RDM</div>
-                            <div class="detail-value">${app.rdm}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">VDM</div>
-                            <div class="detail-value">${app.vdm}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">DarkRP</div>
-                            <div class="detail-value">${app.darkrp}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">PG</div>
-                            <div class="detail-value">${app.pg}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">MT</div>
-                            <div class="detail-value">${app.mt}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">História do Personagem</div>
-                            <div class="detail-value">${app.historia}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Idade do Personagem</div>
-                            <div class="detail-value">${app.idade}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Profissão no RP</div>
-                            <div class="detail-value">${app.profissao}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">Motivação</div>
-                            <div class="detail-value">${app.motivacao}</div>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="action-btn view-btn" onclick="markAsViewed(${app.id})">
-                            <i class="fas fa-eye"></i> Marcar como Vista
-                        </button>
-                        <button class="action-btn delete-btn" onclick="deleteApplication(${app.id})">
-                            <i class="fas fa-trash"></i> Excluir
-                        </button>
-                    </div>
-                `;
-                
+                const appCard = createApplicationCard(app);
                 newApplicationsList.appendChild(appCard);
             });
         }
         
+        // Renderizar apenas os whitelistados
+        function renderWhitelistedApplications() {
+            const applications = getApplications();
+            const whitelistedApplications = applications.filter(app => app.status === 'whitelisted');
+            
+            if (whitelistedApplications.length === 0) {
+                whitelistedApplicationsList.innerHTML = `
+                    <div class="no-applications">
+                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+                        <p>Nenhum jogador whitelistado ainda.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            whitelistedApplicationsList.innerHTML = '';
+            
+            whitelistedApplications.forEach(app => {
+                const appCard = createApplicationCard(app);
+                whitelistedApplicationsList.appendChild(appCard);
+            });
+        }
+        
+        // Criar card de aplicação
+        function createApplicationCard(app) {
+            const appCard = document.createElement('div');
+            appCard.className = 'application-card';
+            
+            appCard.innerHTML = `
+                <div class="application-header">
+                    <div>
+                        <div class="applicant-name">${app.nome}</div>
+                        <div class="applicant-email">${app.email}</div>
+                        <div class="applicant-email">Discord: ${app.discord} (ID: ${app.discordId})</div>
+                        <div class="applicant-email">Nick: ${app.nickPlayer}</div>
+                    </div>
+                    <div>
+                        <small>${app.data}</small>
+                        <span class="status-badge ${app.status === 'new' ? 'status-new' : app.status === 'whitelisted' ? 'status-whitelisted' : 'status-viewed'}">
+                            ${app.status === 'new' ? 'NOVA' : app.status === 'whitelisted' ? 'WHITELISTADO' : 'VISTA'}
+                        </span>
+                    </div>
+                </div>
+                <div class="application-details">
+                    <div class="detail-item">
+                        <div class="detail-label">RDM</div>
+                        <div class="detail-value">${app.rdm}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">VDM</div>
+                        <div class="detail-value">${app.vdm}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">DarkRP</div>
+                        <div class="detail-value">${app.darkrp}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">PG</div>
+                        <div class="detail-value">${app.pg}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">MT</div>
+                        <div class="detail-value">${app.mt}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">História do Personagem</div>
+                        <div class="detail-value">${app.historia}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Idade do Personagem</div>
+                        <div class="detail-value">${app.idade}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Profissão no RP</div>
+                        <div class="detail-value">${app.profissao}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Motivação</div>
+                        <div class="detail-value">${app.motivacao}</div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn view-btn" onclick="markAsViewed(${app.id})" ${app.status === 'viewed' || app.status === 'whitelisted' ? 'disabled' : ''}>
+                        <i class="fas fa-eye"></i> ${app.status === 'viewed' || app.status === 'whitelisted' ? 'Já Visualizada' : 'Marcar como Vista'}
+                    </button>
+                    <button class="action-btn whitelist-btn" onclick="whitelistPlayer(${app.id})" ${app.status === 'whitelisted' ? 'disabled' : ''}>
+                        <i class="fas fa-check-circle"></i> ${app.status === 'whitelisted' ? 'Já Whitelistado' : 'Whitelistado'}
+                    </button>
+                    <button class="action-btn delete-btn" onclick="deleteApplication(${app.id})">
+                        <i class="fas fa-trash"></i> Excluir
+                    </button>
+                </div>
+            `;
+            
+            return appCard;
+        }
+        
         // Marcar inscrição como visualizada
         function markAsViewed(id) {
-            applications = applications.map(app => {
+            const applications = getApplications();
+            const updatedApplications = applications.map(app => {
                 if (app.id === id) {
                     return { ...app, status: 'viewed' };
                 }
                 return app;
             });
             
-            localStorage.setItem('rpApplications', JSON.stringify(applications));
+            saveApplications(updatedApplications);
             
             // Atualizar a visualização
             const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
@@ -1217,24 +1295,70 @@
                 renderApplications();
             }
             
-            updateNewCount();
+            updateCounts();
+            showToast('Inscrição marcada como visualizada!');
+        }
+        
+        // Whitelistar jogador
+        function whitelistPlayer(id) {
+            const applications = getApplications();
+            const updatedApplications = applications.map(app => {
+                if (app.id === id) {
+                    // Simular envio de email
+                    sendWhitelistEmail(app.email, app.nome);
+                    return { ...app, status: 'whitelisted' };
+                }
+                return app;
+            });
+            
+            saveApplications(updatedApplications);
+            
+            // Atualizar a visualização
+            const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+            if (activeTab === 'new') {
+                renderNewApplications();
+            } else if (activeTab === 'whitelisted') {
+                renderWhitelistedApplications();
+            } else {
+                renderApplications();
+            }
+            
+            updateCounts();
+            showToast('Jogador whitelistado e notificado por email!');
+        }
+        
+        // Simular envio de email
+        function sendWhitelistEmail(email, nome) {
+            // Em um ambiente real, isso seria uma chamada para um servidor
+            console.log(`Email enviado para: ${email}`);
+            console.log(`Assunto: Sua inscrição no Montes RP foi aprovada!`);
+            console.log(`Conteúdo: Olá ${nome}, sua inscrição no Montes RP foi aprovada! Agora você está whitelistado e pode entrar na cidade.`);
+            
+            // Simular atraso de rede
+            setTimeout(() => {
+                console.log(`Email enviado com sucesso para ${email}`);
+            }, 1000);
         }
         
         // Excluir inscrição
         function deleteApplication(id) {
             if (confirm('Tem certeza que deseja excluir esta inscrição?')) {
-                applications = applications.filter(app => app.id !== id);
-                localStorage.setItem('rpApplications', JSON.stringify(applications));
+                const applications = getApplications();
+                const updatedApplications = applications.filter(app => app.id !== id);
+                saveApplications(updatedApplications);
                 
                 // Atualizar a visualização
                 const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
                 if (activeTab === 'new') {
                     renderNewApplications();
+                } else if (activeTab === 'whitelisted') {
+                    renderWhitelistedApplications();
                 } else {
                     renderApplications();
                 }
                 
-                updateNewCount();
+                updateCounts();
+                showToast('Inscrição excluída com sucesso!');
             }
         }
     </script>
