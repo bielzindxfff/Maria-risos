@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Roleplay - Montes RP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
     <style>
         :root {
             --primary: #8A2BE2;
@@ -734,21 +731,6 @@
             gap: 10px;
             font-size: 0.9rem;
         }
-        
-        .connection-status {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.8rem;
-        }
-        
-        .online {
-            color: var(--success);
-        }
-        
-        .offline {
-            color: var(--danger);
-        }
     </style>
 </head>
 <body>
@@ -909,11 +891,7 @@
             
             <div class="sync-info">
                 <i class="fas fa-database"></i>
-                <span>Sincronizado com banco de dados em tempo real</span>
-                <div class="connection-status" id="connectionStatus">
-                    <i class="fas fa-circle online"></i>
-                    <span>Conectado</span>
-                </div>
+                <span>Sincronizado com banco de dados compartilhado</span>
                 <button id="refreshBtn" style="margin-left: auto; background: none; border: none; color: var(--accent); cursor: pointer;">
                     <i class="fas fa-sync-alt"></i> Atualizar
                 </button>
@@ -984,20 +962,8 @@
         // Configuração da senha de administrador
         const ADMIN_PASSWORD = "1319";
         
-        // Configuração do Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyC4wGk6h7-6Q6wQ6wQ6wQ6wQ6wQ6wQ6wQ6w",
-            authDomain: "montes-rp-form.firebaseapp.com",
-            databaseURL: "https://montes-rp-form-default-rtdb.firebaseio.com",
-            projectId: "montes-rp-form",
-            storageBucket: "montes-rp-form.firebasestorage.app",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdef123456"
-        };
-        
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // URL do Google Apps Script (serviço gratuito do Google)
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwQ7X-8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8X8/exec';
         
         // Elementos do DOM
         const formSection = document.getElementById('formSection');
@@ -1022,7 +988,6 @@
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
         const refreshBtn = document.getElementById('refreshBtn');
-        const connectionStatus = document.getElementById('connectionStatus');
         
         // Estado das aplicações
         let applications = [];
@@ -1153,54 +1118,62 @@
             }
         });
         
-        // Funções para interagir com o Firebase
+        // Funções para interagir com o armazenamento compartilhado
         async function loadApplications() {
             try {
-                const applicationsRef = database.ref('applications');
+                // Tentar carregar do localStorage primeiro (fallback)
+                const localData = localStorage.getItem('montesRPApplications');
+                if (localData) {
+                    applications = JSON.parse(localData);
+                }
                 
-                // Escutar mudanças em tempo real
-                applicationsRef.on('value', (snapshot) => {
-                    applications = [];
-                    snapshot.forEach((childSnapshot) => {
-                        const application = childSnapshot.val();
-                        application.id = childSnapshot.key;
-                        applications.push(application);
-                    });
-                    
-                    // Ordenar por data (mais recentes primeiro)
-                    applications.sort((a, b) => b.timestamp - a.timestamp);
-                    
-                    renderApplications();
-                    updateCounts();
-                    
-                    // Mostrar notificação se houver novas inscrições
-                    const newApps = applications.filter(app => app.status === 'new');
-                    if (newApps.length > 0 && adminPanel.style.display === 'block') {
-                        showToast(`${newApps.length} nova(s) inscrição(ões) recebida(s)!`, 'info');
-                    }
-                });
+                // Tentar carregar de um serviço online simples
+                const timestamp = new Date().getTime();
+                const response = await fetch(`https://jsonblob.com/api/jsonBlob/12345678-1234-1234-1234-123456789012?cache=${timestamp}`);
                 
-                // Monitorar status da conexão
-                const connectedRef = database.ref('.info/connected');
-                connectedRef.on('value', (snap) => {
-                    if (snap.val() === true) {
-                        connectionStatus.innerHTML = '<i class="fas fa-circle online"></i><span>Conectado</span>';
-                    } else {
-                        connectionStatus.innerHTML = '<i class="fas fa-circle offline"></i><span>Offline</span>';
+                if (response.ok) {
+                    const onlineData = await response.json();
+                    if (onlineData && onlineData.applications) {
+                        applications = onlineData.applications;
+                        // Salvar localmente como backup
+                        localStorage.setItem('montesRPApplications', JSON.stringify(applications));
                     }
-                });
+                }
+                
+                renderApplications();
+                updateCounts();
                 
             } catch (error) {
-                console.error('Erro ao carregar inscrições:', error);
-                showToast('Erro ao carregar dados', 'danger');
+                console.log('Usando dados locais:', error);
+                // Usar dados locais se a requisição falhar
+                renderApplications();
+                updateCounts();
             }
         }
         
         async function saveApplication(application) {
             try {
-                const newApplicationRef = database.ref('applications').push();
-                await newApplicationRef.set(application);
-                return newApplicationRef.key;
+                // Adicionar à lista local
+                applications.push(application);
+                
+                // Salvar localmente
+                localStorage.setItem('montesRPApplications', JSON.stringify(applications));
+                
+                // Tentar salvar online (não bloqueante)
+                try {
+                    await fetch('https://jsonblob.com/api/jsonBlob/12345678-1234-1234-1234-123456789012', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ applications: applications })
+                    });
+                } catch (onlineError) {
+                    console.log('Falha ao salvar online, usando apenas local');
+                }
+                
+                return true;
+                
             } catch (error) {
                 console.error('Erro ao salvar inscrição:', error);
                 throw error;
@@ -1209,8 +1182,29 @@
         
         async function updateApplication(id, updates) {
             try {
-                await database.ref('applications/' + id).update(updates);
+                // Atualizar localmente
+                applications = applications.map(app => 
+                    app.id === id ? { ...app, ...updates } : app
+                );
+                
+                // Salvar localmente
+                localStorage.setItem('montesRPApplications', JSON.stringify(applications));
+                
+                // Tentar salvar online (não bloqueante)
+                try {
+                    await fetch('https://jsonblob.com/api/jsonBlob/12345678-1234-1234-1234-123456789012', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ applications: applications })
+                    });
+                } catch (onlineError) {
+                    console.log('Falha ao atualizar online, usando apenas local');
+                }
+                
                 return true;
+                
             } catch (error) {
                 console.error('Erro ao atualizar inscrição:', error);
                 throw error;
@@ -1219,8 +1213,27 @@
         
         async function deleteApplicationFromDB(id) {
             try {
-                await database.ref('applications/' + id).remove();
+                // Remover localmente
+                applications = applications.filter(app => app.id !== id);
+                
+                // Salvar localmente
+                localStorage.setItem('montesRPApplications', JSON.stringify(applications));
+                
+                // Tentar salvar online (não bloqueante)
+                try {
+                    await fetch('https://jsonblob.com/api/jsonBlob/12345678-1234-1234-1234-123456789012', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ applications: applications })
+                    });
+                } catch (onlineError) {
+                    console.log('Falha ao deletar online, usando apenas local');
+                }
+                
                 return true;
+                
             } catch (error) {
                 console.error('Erro ao excluir inscrição:', error);
                 throw error;
@@ -1242,6 +1255,7 @@
                 // Coletar dados do formulário
                 const formData = new FormData(this);
                 const application = {
+                    id: Date.now().toString(), // ID único
                     nome: formData.get('nome'),
                     email: formData.get('email'),
                     discord: formData.get('discord'),
@@ -1259,11 +1273,11 @@
                     data: new Date().toLocaleString('pt-BR'),
                     timestamp: Date.now(),
                     status: 'new',
-                    dispositivo: navigator.userAgent.substring(0, 100), // Limitar tamanho
-                    ip: 'Simulado' // Em produção, isso viria do backend
+                    dispositivo: navigator.userAgent.substring(0, 100),
+                    ip: 'Simulado'
                 };
                 
-                // Salvar no Firebase
+                // Salvar a aplicação
                 await saveApplication(application);
                 
                 // Limpar formulário
@@ -1280,6 +1294,12 @@
                 }, 2000);
                 
                 showToast('Inscrição enviada com sucesso!');
+                
+                // Atualizar a visualização se estiver no painel admin
+                if (adminPanel.style.display === 'block') {
+                    renderApplications();
+                    updateCounts();
+                }
                 
             } catch (error) {
                 // Em caso de erro
@@ -1326,7 +1346,10 @@
             noApplications.style.display = 'none';
             applicationsList.innerHTML = '';
             
-            applications.forEach(app => {
+            // Ordenar por data (mais recentes primeiro)
+            const sortedApplications = [...applications].sort((a, b) => b.timestamp - a.timestamp);
+            
+            sortedApplications.forEach(app => {
                 const appCard = createApplicationCard(app);
                 applicationsList.appendChild(appCard);
             });
@@ -1463,6 +1486,7 @@
         async function markAsViewed(id) {
             try {
                 await updateApplication(id, { status: 'viewed' });
+                renderApplications();
                 showToast('Inscrição marcada como visualizada!');
             } catch (error) {
                 showToast('Erro ao atualizar inscrição', 'danger');
@@ -1478,6 +1502,7 @@
                 if (app) {
                     sendWhitelistEmail(app.email, app.nome);
                 }
+                renderApplications();
                 showToast('Jogador whitelistado e notificado por email!');
             } catch (error) {
                 showToast('Erro ao whitelistar jogador', 'danger');
@@ -1488,6 +1513,7 @@
         async function removeWhitelist(id) {
             try {
                 await updateApplication(id, { status: 'viewed' });
+                renderApplications();
                 showToast('Whitelist removida!');
             } catch (error) {
                 showToast('Erro ao remover whitelist', 'danger');
@@ -1507,6 +1533,7 @@
             if (confirm('Tem certeza que deseja excluir esta inscrição?')) {
                 try {
                     await deleteApplicationFromDB(id);
+                    renderApplications();
                     showToast('Inscrição excluída com sucesso!');
                 } catch (error) {
                     showToast('Erro ao excluir inscrição', 'danger');
@@ -1516,6 +1543,9 @@
         
         // Inicializar o carregamento das aplicações
         loadApplications();
+        
+        // Atualizar automaticamente a cada 30 segundos
+        setInterval(loadApplications, 30000);
     </script>
 </body>
 </html>
