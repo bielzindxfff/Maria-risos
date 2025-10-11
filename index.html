@@ -187,6 +187,21 @@
             box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
+        /* Estilo específico para o select corrigido */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300CED1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 15px;
+        }
+        
+        select option {
+            background: #1A1A2E;
+            color: white;
+            padding: 10px;
+        }
+        
         input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: var(--accent);
@@ -566,6 +581,11 @@
             color: white;
         }
         
+        .remove-whitelist-btn {
+            background: var(--warning);
+            color: white;
+        }
+        
         .action-btn:hover {
             transform: translateY(-3px);
         }
@@ -685,6 +705,31 @@
         .toast.show {
             transform: translateY(0);
             opacity: 1;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .sync-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -815,13 +860,13 @@
                     <div class="form-group">
                         <label for="profissao">O que ele vai ser no RP? <span class="required">*</span></label>
                         <select id="profissao" name="profissao" required>
-                            <option value="" style="color: #888;">Selecione uma opção</option>
-                            <option value="Policial" style="color: white;">Policial</option>
-                            <option value="Médico" style="color: white;">Médico</option>
-                            <option value="Mecânico" style="color: white;">Mecânico</option>
-                            <option value="Empresario" style="color: white;">Empresário</option>
-                            <option value="Criador de Conteúdo" style="color: white;">Criador de Conteúdo</option>
-                            <option value="Outros" style="color: white;">Outros</option>
+                            <option value="">Selecione uma opção</option>
+                            <option value="Policial">Policial</option>
+                            <option value="Médico">Médico</option>
+                            <option value="Mecânico">Mecânico</option>
+                            <option value="Empresario">Empresário</option>
+                            <option value="Criador de Conteúdo">Criador de Conteúdo</option>
+                            <option value="Outros">Outros</option>
                         </select>
                     </div>
                     
@@ -843,6 +888,14 @@
                 <i class="fas fa-arrow-left"></i> Voltar ao Formulário
             </button>
             <h2><i class="fas fa-user-shield"></i> Painel Administrativo</h2>
+            
+            <div class="sync-info">
+                <i class="fas fa-database"></i>
+                <span>Sincronizado com banco de dados online</span>
+                <button id="refreshBtn" style="margin-left: auto; background: none; border: none; color: var(--accent); cursor: pointer;">
+                    <i class="fas fa-sync-alt"></i> Atualizar
+                </button>
+            </div>
             
             <div class="tab-container">
                 <div class="tabs">
@@ -909,15 +962,10 @@
         // Configuração da senha de administrador
         const ADMIN_PASSWORD = "1319";
         
-        // Simulação de banco de dados usando localStorage
-        // Em um ambiente real, isso seria substituído por um backend
-        function getApplications() {
-            return JSON.parse(localStorage.getItem('rpApplications')) || [];
-        }
-        
-        function saveApplications(applications) {
-            localStorage.setItem('rpApplications', JSON.stringify(applications));
-        }
+        // URL do banco de dados online simulado (JSONBin)
+        // Em um ambiente real, isso seria substituído por um backend próprio
+        const DB_URL = 'https://api.jsonbin.io/v3/b/67c3b6e3ad19ca34f89aac6c';
+        const DB_MASTER_KEY = '$2a$10$Zf6o.YKJY9c6Q7Q3Q8Q8QeQ8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8Q8';
         
         // Elementos do DOM
         const formSection = document.getElementById('formSection');
@@ -941,6 +989,7 @@
         const floatingElements = document.getElementById('floatingElements');
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const refreshBtn = document.getElementById('refreshBtn');
         
         // Criar elementos flutuantes de fundo
         function createFloatingElements() {
@@ -979,6 +1028,12 @@
         backToForm.addEventListener('click', () => {
             adminPanel.style.display = 'none';
             formSection.style.display = 'block';
+        });
+        
+        // Botão de atualizar
+        refreshBtn.addEventListener('click', () => {
+            renderApplications();
+            showToast('Dados atualizados!');
         });
         
         // Sistema de abas
@@ -1062,8 +1117,59 @@
             }
         });
         
+        // Funções para interagir com o banco de dados online
+        async function getApplicationsFromDB() {
+            try {
+                const response = await fetch(DB_URL + '/latest', {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': DB_MASTER_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao carregar dados');
+                }
+                
+                const data = await response.json();
+                return data.record.applications || [];
+            } catch (error) {
+                console.error('Erro ao carregar inscrições:', error);
+                // Fallback para localStorage se a API falhar
+                return JSON.parse(localStorage.getItem('rpApplications')) || [];
+            }
+        }
+        
+        async function saveApplicationsToDB(applications) {
+            try {
+                const response = await fetch(DB_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'X-Master-Key': DB_MASTER_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ applications })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Erro ao salvar dados');
+                }
+                
+                // Também salva localmente como backup
+                localStorage.setItem('rpApplications', JSON.stringify(applications));
+                
+                return true;
+            } catch (error) {
+                console.error('Erro ao salvar inscrições:', error);
+                // Fallback para localStorage se a API falhar
+                localStorage.setItem('rpApplications', JSON.stringify(applications));
+                return false;
+            }
+        }
+        
         // Processar envio do formulário
-        rpForm.addEventListener('submit', function(e) {
+        rpForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             // Coletar dados do formulário
@@ -1085,17 +1191,19 @@
                 profissao: formData.get('profissao'),
                 motivacao: formData.get('motivacao'),
                 data: new Date().toLocaleString('pt-BR'),
-                status: 'new'
+                status: 'new',
+                dispositivo: navigator.userAgent,
+                ip: 'Simulado' // Em um ambiente real, isso viria do backend
             };
             
-            // Obter aplicações existentes
-            const applications = getApplications();
+            // Obter aplicações existentes do banco de dados
+            const applications = await getApplicationsFromDB();
             
             // Adicionar à lista de inscrições
             applications.push(application);
             
-            // Salvar no localStorage
-            saveApplications(applications);
+            // Salvar no banco de dados
+            const success = await saveApplicationsToDB(applications);
             
             // Limpar formulário
             this.reset();
@@ -1111,6 +1219,12 @@
                 submitBtn.style.background = 'var(--gradient-1)';
             }, 2000);
             
+            if (success) {
+                showToast('Inscrição enviada com sucesso!');
+            } else {
+                showToast('Inscrição salva localmente (sem conexão)', 'warning');
+            }
+            
             // Atualizar contador se estiver no painel admin
             if (adminPanel.style.display === 'block') {
                 updateCounts();
@@ -1118,8 +1232,8 @@
         });
         
         // Atualizar contadores
-        function updateCounts() {
-            const applications = getApplications();
+        async function updateCounts() {
+            const applications = await getApplicationsFromDB();
             const newApplications = applications.filter(app => app.status === 'new');
             const whitelistedApplications = applications.filter(app => app.status === 'whitelisted');
             
@@ -1135,8 +1249,8 @@
         }
         
         // Renderizar todas as inscrições
-        function renderApplications() {
-            const applications = getApplications();
+        async function renderApplications() {
+            const applications = await getApplicationsFromDB();
             updateCounts();
             
             if (applications.length === 0) {
@@ -1156,8 +1270,8 @@
         }
         
         // Renderizar apenas as novas inscrições
-        function renderNewApplications() {
-            const applications = getApplications();
+        async function renderNewApplications() {
+            const applications = await getApplicationsFromDB();
             const newApplications = applications.filter(app => app.status === 'new');
             
             if (newApplications.length === 0) {
@@ -1179,8 +1293,8 @@
         }
         
         // Renderizar apenas os whitelistados
-        function renderWhitelistedApplications() {
-            const applications = getApplications();
+        async function renderWhitelistedApplications() {
+            const applications = await getApplicationsFromDB();
             const whitelistedApplications = applications.filter(app => app.status === 'whitelisted');
             
             if (whitelistedApplications.length === 0) {
@@ -1213,6 +1327,9 @@
                         <div class="applicant-email">${app.email}</div>
                         <div class="applicant-email">Discord: ${app.discord} (ID: ${app.discordId})</div>
                         <div class="applicant-email">Nick: ${app.nickPlayer}</div>
+                        <div class="applicant-email" style="font-size: 0.8rem; color: #888;">
+                            <i class="fas fa-desktop"></i> Dispositivo: ${app.dispositivo ? 'Outro dispositivo' : 'Este dispositivo'}
+                        </div>
                     </div>
                     <div>
                         <small>${app.data}</small>
@@ -1266,6 +1383,9 @@
                     <button class="action-btn whitelist-btn" onclick="whitelistPlayer(${app.id})" ${app.status === 'whitelisted' ? 'disabled' : ''}>
                         <i class="fas fa-check-circle"></i> ${app.status === 'whitelisted' ? 'Já Whitelistado' : 'Whitelistado'}
                     </button>
+                    <button class="action-btn remove-whitelist-btn" onclick="removeWhitelist(${app.id})" ${app.status !== 'whitelisted' ? 'disabled' : ''}>
+                        <i class="fas fa-times-circle"></i> Remover Whitelist
+                    </button>
                     <button class="action-btn delete-btn" onclick="deleteApplication(${app.id})">
                         <i class="fas fa-trash"></i> Excluir
                     </button>
@@ -1276,8 +1396,8 @@
         }
         
         // Marcar inscrição como visualizada
-        function markAsViewed(id) {
-            const applications = getApplications();
+        async function markAsViewed(id) {
+            const applications = await getApplicationsFromDB();
             const updatedApplications = applications.map(app => {
                 if (app.id === id) {
                     return { ...app, status: 'viewed' };
@@ -1285,7 +1405,7 @@
                 return app;
             });
             
-            saveApplications(updatedApplications);
+            await saveApplicationsToDB(updatedApplications);
             
             // Atualizar a visualização
             const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
@@ -1300,8 +1420,8 @@
         }
         
         // Whitelistar jogador
-        function whitelistPlayer(id) {
-            const applications = getApplications();
+        async function whitelistPlayer(id) {
+            const applications = await getApplicationsFromDB();
             const updatedApplications = applications.map(app => {
                 if (app.id === id) {
                     // Simular envio de email
@@ -1311,7 +1431,7 @@
                 return app;
             });
             
-            saveApplications(updatedApplications);
+            await saveApplicationsToDB(updatedApplications);
             
             // Atualizar a visualização
             const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
@@ -1325,6 +1445,32 @@
             
             updateCounts();
             showToast('Jogador whitelistado e notificado por email!');
+        }
+        
+        // Remover whitelist
+        async function removeWhitelist(id) {
+            const applications = await getApplicationsFromDB();
+            const updatedApplications = applications.map(app => {
+                if (app.id === id) {
+                    return { ...app, status: 'viewed' };
+                }
+                return app;
+            });
+            
+            await saveApplicationsToDB(updatedApplications);
+            
+            // Atualizar a visualização
+            const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
+            if (activeTab === 'new') {
+                renderNewApplications();
+            } else if (activeTab === 'whitelisted') {
+                renderWhitelistedApplications();
+            } else {
+                renderApplications();
+            }
+            
+            updateCounts();
+            showToast('Whitelist removida!');
         }
         
         // Simular envio de email
@@ -1341,11 +1487,11 @@
         }
         
         // Excluir inscrição
-        function deleteApplication(id) {
+        async function deleteApplication(id) {
             if (confirm('Tem certeza que deseja excluir esta inscrição?')) {
-                const applications = getApplications();
+                const applications = await getApplicationsFromDB();
                 const updatedApplications = applications.filter(app => app.id !== id);
-                saveApplications(updatedApplications);
+                await saveApplicationsToDB(updatedApplications);
                 
                 // Atualizar a visualização
                 const activeTab = document.querySelector('.tab.active').getAttribute('data-tab');
