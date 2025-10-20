@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Maria, com todo meu carinho</title>
+    <title>Para Maria</title>
     <style>
         * {
             margin: 0;
@@ -38,20 +38,6 @@
             margin: -30px -30px 30px -30px;
             border-bottom-left-radius: 50% 20%;
             border-bottom-right-radius: 50% 20%;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="rgba(255,255,255,0.1)"><path d="M50,20 C60,15 75,20 80,30 C85,40 80,55 70,60 C60,65 45,60 40,50 C35,40 40,25 50,20 Z"/></svg>');
-            background-size: 100px;
-            opacity: 0.3;
         }
         
         h1 {
@@ -59,56 +45,32 @@
             color: #ffffff;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            color: #e0c3fc;
-            font-style: italic;
-            position: relative;
         }
         
         .heart {
             color: #ff6b9d;
             display: inline-block;
             animation: pulse 1.5s infinite;
-            text-shadow: 0 0 10px rgba(255, 107, 157, 0.7);
         }
         
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); text-shadow: 0 0 20px rgba(255, 107, 157, 1); }
+            50% { transform: scale(1.2); }
             100% { transform: scale(1); }
         }
         
         .message-section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             padding: 25px;
             background: linear-gradient(145deg, #252542, #1e1e38);
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
             border: 1px solid #3d3d5c;
-            transition: transform 0.3s ease;
-        }
-        
-        .message-section:hover {
-            transform: translateY(-5px);
         }
         
         h2 {
             color: #c770e6;
-            border-bottom: 2px solid #8a4baf;
-            padding-bottom: 10px;
             margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            text-shadow: 0 0 5px rgba(199, 112, 230, 0.3);
-        }
-        
-        h2 i {
-            margin-right: 10px;
-            filter: drop-shadow(0 0 3px rgba(199, 112, 230, 0.5));
+            text-align: center;
         }
         
         p {
@@ -123,163 +85,46 @@
             border-radius: 5px;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        
-        .beauty-rating {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: linear-gradient(135deg, #ff6b9d, #c770e6);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
-        }
-        
-        .rating-number {
-            font-size: 3rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: glow 2s infinite alternate;
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
-            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.6); }
-        }
-        
-        .compliment-section {
-            background: linear-gradient(135deg, #ff9ecd, #c770e6);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(255, 158, 205, 0.3);
-        }
-        
-        .compliment-section p {
-            color: #4a235a;
-            font-weight: bold;
-            font-size: 1.3rem;
-            text-align: center;
-        }
-        
-        .perfect-section {
-            background: linear-gradient(135deg, #4a235a, #6a2c8c);
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(106, 44, 140, 0.3);
-            border-left: 5px solid #ff6b9d;
-        }
-        
-        .perfect-section h3 {
-            color: #ff9ecd;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-shadow: 0 0 5px rgba(255, 158, 205, 0.3);
-        }
-        
-        .perfect-section h3 i {
-            margin-right: 10px;
-            filter: drop-shadow(0 0 3px rgba(255, 158, 205, 0.5));
-        }
-        
-        .qualities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 25px 0;
-        }
-        
-        .quality-item {
-            background: linear-gradient(135deg, #39394d, #2d2d44);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
-            border: 1px solid #4a4a6a;
-            transition: all 0.3s ease;
-        }
-        
-        .quality-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
-            border-color: #8a4baf;
-        }
-        
-        .quality-item i {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            color: #c770e6;
-            filter: drop-shadow(0 0 5px rgba(199, 112, 230, 0.3));
         }
         
         .love-message {
             background: linear-gradient(135deg, #ff6b9d, #c770e6);
-            padding: 30px;
-            border-radius: 15px;
+            padding: 25px;
             margin: 25px 0;
+            border-radius: 15px;
             text-align: center;
-            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
         }
         
         .love-message p {
             color: white;
             font-weight: bold;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             text-align: center;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
-        
-        .hashtags {
-            text-align: center;
-            margin-top: 30px;
+
+        .fofura-section {
+            background: linear-gradient(135deg, #4a235a, #6a2c8c);
             padding: 20px;
-            background: linear-gradient(135deg, #2d2d44, #39394d);
+            margin: 20px 0;
             border-radius: 15px;
-            border: 1px solid #4a4a6a;
+            border-left: 5px solid #ff6b9d;
         }
         
-        .hashtag {
-            display: inline-block;
-            margin: 5px 10px;
-            padding: 8px 15px;
-            background: linear-gradient(45deg, #ff6b9d, #c770e6);
-            border-radius: 20px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 3px 10px rgba(255, 107, 157, 0.3);
-            animation: floatHashtag 3s ease-in-out infinite;
+        .qualities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            justify-content: center;
         }
         
-        .hashtag:nth-child(2) {
-            animation-delay: 0.5s;
-            background: linear-gradient(45deg, #c770e6, #8a4baf);
-        }
-        
-        .hashtag:nth-child(3) {
-            animation-delay: 1s;
-            background: linear-gradient(45deg, #8a4baf, #533483);
-        }
-        
-        .hashtag:nth-child(4) {
-            animation-delay: 1.5s;
-            background: linear-gradient(45deg, #533483, #ff6b9d);
-        }
-        
-        .hashtag:nth-child(5) {
-            animation-delay: 2s;
-            background: linear-gradient(45deg, #ff6b9d, #c770e6);
-        }
-        
-        @keyframes floatHashtag {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .quality {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
         }
         
         .kiss-button {
@@ -293,18 +138,11 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
             transition: all 0.3s ease;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .kiss-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
-        }
-        
-        .kiss-button:active {
-            transform: translateY(1px) scale(0.98);
+            transform: translateY(-3px);
         }
         
         .kiss-message {
@@ -324,7 +162,6 @@
             font-size: 4rem;
             font-weight: bold;
             color: #ff6b9d;
-            text-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
             animation: kissPulse 1s infinite;
         }
         
@@ -333,90 +170,12 @@
             50% { transform: scale(1.1); opacity: 0.8; }
         }
         
-        .kiss-heart {
-            position: absolute;
-            font-size: 30px;
-            color: #ff6b9d;
-            animation: kissFloat 3s linear forwards;
-            pointer-events: none;
-            z-index: 1001;
-        }
-        
-        @keyframes kissFloat {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
         footer {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid #39394d;
             color: #a78bfa;
-            font-size: 0.9rem;
-        }
-        
-        .floating-hearts {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .floating-heart {
-            position: absolute;
-            font-size: 24px;
-            color: rgba(255, 107, 157, 0.7);
-            animation: float 8s linear infinite;
-            text-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -2;
-        }
-        
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 5s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 1; }
         }
         
         @media (max-width: 600px) {
@@ -432,18 +191,8 @@
                 padding: 15px;
             }
             
-            .rating-number {
-                font-size: 2.5rem;
-            }
-            
-            .qualities-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .hashtag {
-                display: block;
-                margin: 10px auto;
-                width: 80%;
+            .qualities {
+                flex-direction: column;
             }
             
             .kiss-button {
@@ -458,182 +207,96 @@
     </style>
 </head>
 <body>
-    <div class="stars" id="stars-container"></div>
-    <div class="floating-hearts" id="hearts-container"></div>
-    
     <div class="container">
         <header>
             <h1>Para Maria <span class="heart">💖</span></h1>
-            <p class="subtitle">A pessoa mais incrível que já conheci</p>
         </header>
         
         <section class="message-section">
-            <h2><i>💖</i> Você é MUITO LINDA!</h2>
+            <h2>Do fundo do meu coração</h2>
             
-            <div class="perfect-section">
-                <h3><i>✨</i> Você é Simplesmente Perfeita!</h3>
-                <p>Tudo que eu procuro em uma pessoa para o meu futuro, eu encontro em você. Cada qualidade, cada detalhe, cada parte do seu ser combina perfeitamente com o que sempre imaginei para minha vida.</p>
-                <p>Você é a personificação de tudo que eu sempre desejei - sua bondade, sua inteligência, seu jeito único de ser, sua beleza incomparável.</p>
-            </div>
+            <p>Maria, desde que eu comecei a falar com você - acho que vai fazer um mês e meio por aí - eu gostei MUITO de você de verdade.</p>
             
-            <div class="beauty-rating">
-                <p>Classificação da sua Beleza:</p>
-                <div class="rating-number">10000/10</div>
-                <p>Perfeição Absoluta! ✨</p>
-            </div>
+            <p>O seu jeito de ser e seu jeito de agir... Acho você <span class="highlight">muito fofaaaa</span> e maravilhosa!</p>
             
-            <div class="compliment-section">
-                <p>Maria, você é simplesmente MARAVILHOSA!</p>
-                <p>Não existem palavras suficientes para descrever o quanto você é linda, por dentro e por fora.</p>
+            <div class="fofura-section">
+                <p>Seu cabelo todo enrolandinho (cacheado kk) acho MUITO fofo de verdade! As vezes assumo que fico com mó vontade de apertar você de tanta fofura.</p>
+                <p>E seu jeito de falar, de rir, até mesmo quando você fica séria... Tudo em você me conquista mais a cada dia.</p>
             </div>
-            
-            <p>Queria que você soubesse o quanto é especial. Sua beleza vai muito além do físico - transborda em cada gesto, cada sorriso, cada palavra.</p>
-            <p>Você é aquela pessoa rara que ilumina qualquer ambiente que entra. Sua presença transforma momentos comuns em algo mágico.</p>
-            <p>Não é exagero dizer que você é <span class="highlight">perfeita</span> do jeito que é. Cada detalhe, cada particularidade sua contribui para formar essa pessoa incrível que você é.</p>
-        </section>
-
-        <section class="message-section">
-            <h2><i>🌟</i> O Que Me Encanta Em Você</h2>
-            <div class="qualities-grid">
-                <div class="quality-item">
-                    <i>😊</i>
-                    <h3>Seu Sorriso</h3>
-                    <p>Ilumina meu dia inteiro</p>
-                </div>
-                <div class="quality-item">
-                    <i>💭</i>
-                    <h3>Sua Mente</h3>
-                    <p>Inteligente e perspicaz</p>
-                </div>
-                <div class="quality-item">
-                    <i>❤️</i>
-                    <h3>Seu Coração</h3>
-                    <p>Bondoso e generoso</p>
-                </div>
-                <div class="quality-item">
-                    <i>🎨</i>
-                    <h3>Seu Jeito</h3>
-                    <p>Único e especial</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="message-section">
-            <h2><i>💫</i> Meus Sentimentos</h2>
-            <p>Quando estou com você, sinto que tudo faz sentido. O mundo parece mais colorido, os problemas ficam menores e a felicidade se torna mais real.</p>
             
             <div class="love-message">
-                <p>"Você é o tipo de pessoa que eu quero ao meu lado para sempre. Cada momento contigo é especial."</p>
+                <p>Você é incrível e especial 💖</p>
             </div>
             
-            <p>Não consigo imaginar meu futuro sem você nele. Você se tornou parte fundamental dos meus sonhos e planos.</p>
-            <p>Espero um dia ter a chance de te mostrar o quanto você significa para mim, não apenas com palavras, mas com ações e com todo meu coração.</p>
+            <p>Mas tipo, as vezes não sei se você realmente gosta de mim mesmo, sei lá... Fico com medo de estar criando expectativas ou iludindo a si mesmo.</p>
+            
+            <p>Mas de verdade saiba que eu <span class="highlight">Gosto MUITO de você</span> de verdade mesmo! Você é incrível e queria ter a oportunidade de ter te conhecido antes.</p>
+            
+            <p>Nesses quase dois meses conversando com você, cada mensagem sua me deixa mais feliz. Quando vejo que você mandou mensagem, meu dia automaticamente fica melhor.</p>
         </section>
 
         <section class="message-section">
-            <h2><i>📝</i> Uma Promessa</h2>
-            <p>Quero que saiba que sempre estarei aqui para você, não importa o que aconteça. Vou te apoiar, te incentivar e te admirar todos os dias.</p>
-            <p>Prometo valorizar cada momento ao seu lado e fazer de tudo para ver você feliz, porque sua felicidade se tornou a minha também.</p>
+            <h2>Coisas que Admiro em Você</h2>
             
-            <div class="perfect-section">
-                <h3><i>🤗</i> Você Merece Tudo</h3>
-                <p>Você merece todo o amor do mundo, toda a felicidade possível e todas as coisas boas que a vida pode oferecer.</p>
-                <p>Espero poder ser a pessoa que vai te dar tudo isso e muito mais.</p>
+            <div class="qualities">
+                <div class="quality">
+                    <h3>💕 Fofura</h3>
+                    <p>Seu jeito único</p>
+                </div>
+                <div class="quality">
+                    <h3>👩‍🦰 Cabelo</h3>
+                    <p>Cacheado lindo</p>
+                </div>
+                <div class="quality">
+                    <h3>😊 Sorriso</h3>
+                    <p>Ilumina tudo</p>
+                </div>
+                <div class="quality">
+                    <h3>💭 Personalidade</h3>
+                    <p>Maravilhosa</p>
+                </div>
             </div>
+            
+            <p>Queria que você soubesse o quanto eu valorizo nossa conversa. Pode parecer bobeira, mas pra mim significa muito.</p>
+            
+            <p>As vezes fico pensando como seria se a gente se conhecesse pessoalmente... Tenho certeza que seria incrível!</p>
         </section>
 
-        <div class="hashtags">
-            <div class="hashtag">#MuitoLinda</div>
-            <div class="hashtag">#Perfeita</div>
-            <div class="hashtag">#MuitoDiva</div>
-            <div class="hashtag">#risos</div>
-            <div class="hashtag">#SuaLindaaaaaaaaaa</div>
-        </div>
+        <section class="message-section">
+            <h2>Meus Sentimentos</h2>
+            
+            <p>Eu nunca fui muito de acreditar em conexões instantâneas, mas com você foi diferente. Desde o início senti que tinha algo especial.</p>
+            
+            <div class="love-message">
+                <p>"Você me faz bem de um jeito que nem consigo explicar"</p>
+            </div>
+            
+            <p>Espero que a gente possa continuar conversando e se conhecendo cada vez mais. Quero saber todos os seus sonhos, medos, histórias...</p>
+            
+            <p>E mesmo que você não sinta o mesmo por mim, saiba que vou continuar te admirando e torcendo pela sua felicidade, porque você merece tudo de bom!</p>
+        </section>
 
         <button class="kiss-button" onclick="showKisses()">Clica aqui</button>
         
         <footer>
-            <p>Com todo meu carinho e admiração</p>
-            <p>💖 ✨ 🌟</p>
+            <p>Com carinho e admiração 💖</p>
+            <p>Você é especial demais!</p>
         </footer>
     </div>
 
     <div class="kiss-message" id="kissMessage">
-        <div class="kiss-text">beijoss 💋</div>
+        <div class="kiss-text">Eu ti Amuuu💖</div>
     </div>
 
     <script>
-        // Criar corações flutuantes
-        function createHearts() {
-            const container = document.getElementById('hearts-container');
-            const heartCount = 25;
-            
-            for (let i = 0; i < heartCount; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('floating-heart');
-                heart.innerHTML = '💖';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 10 + 5) + 's';
-                heart.style.fontSize = (Math.random() * 25 + 15) + 'px';
-                heart.style.animationDelay = Math.random() * 5 + 's';
-                
-                container.appendChild(heart);
-            }
-        }
-        
-        // Criar estrelas de fundo
-        function createStars() {
-            const container = document.getElementById('stars-container');
-            const starCount = 150;
-            
-            for (let i = 0; i < starCount; i++) {
-                const star = document.createElement('div');
-                star.classList.add('star');
-                star.style.left = Math.random() * 100 + 'vw';
-                star.style.top = Math.random() * 100 + 'vh';
-                star.style.width = (Math.random() * 3 + 1) + 'px';
-                star.style.height = star.style.width;
-                star.style.animationDelay = Math.random() * 5 + 's';
-                star.style.animationDuration = (Math.random() * 5 + 3) + 's';
-                
-                container.appendChild(star);
-            }
-        }
-
-        // Função para mostrar beijos e corações
         function showKisses() {
             const kissMessage = document.getElementById('kissMessage');
             kissMessage.style.display = 'flex';
             
-            // Criar muitos corações
-            for (let i = 0; i < 50; i++) {
-                const heart = document.createElement('div');
-                heart.classList.add('kiss-heart');
-                heart.innerHTML = '💖';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
-                heart.style.animationDelay = Math.random() * 1 + 's';
-                
-                document.body.appendChild(heart);
-                
-                // Remover coração após animação
-                setTimeout(() => {
-                    heart.remove();
-                }, 3000);
-            }
-            
-            // Esconder mensagem após alguns segundos
             setTimeout(() => {
                 kissMessage.style.display = 'none';
             }, 3000);
         }
-        
-        // Inicializar efeitos quando a página carregar
-        window.addEventListener('load', function() {
-            createHearts();
-            createStars();
-        });
     </script>
 </body>
 </html>
