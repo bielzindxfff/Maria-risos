@@ -3,148 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Maria</title>
+    <title>Para Maria, Meu Amor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
     <style>
+        /* Paleta de Cores:
+        Fundo Escuro: #17101F (Quase preto, roxo escuro)
+        Roxo Profundo: #3A015E
+        Magenta Vibrante: #FF0090
+        Roxo Suave: #A033FF
+        Texto Claro: #f0f0f5
+        */
+
+        /* Estilos Globais e Fundo */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Fonte Primária Moderna */
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-            color: #e6e6e6;
+            background: linear-gradient(135deg, #17101F, #3A015E, #17101F);
+            color: #f0f0f5;
             line-height: 1.6;
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Centraliza o conteúdo verticalmente */
         }
         
+        /* Container Principal (Glassmorphism sutil) */
         .container {
             max-width: 800px;
-            margin: 0 auto;
-            background-color: rgba(30, 30, 46, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 95%;
+            background-color: rgba(30, 16, 46, 0.6); /* Mais transparência */
+            backdrop-filter: blur(10px); /* Efeito de vidro */
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
             overflow: hidden;
-            padding: 30px;
-            border: 1px solid #39394d;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
         }
         
+        /* Cabeçalho */
         header {
             text-align: center;
-            padding: 30px 0;
-            background: linear-gradient(45deg, #533483, #8a4baf);
-            margin: -30px -30px 30px -30px;
-            border-bottom-left-radius: 50% 20%;
-            border-bottom-right-radius: 50% 20%;
+            padding: 40px 0;
+            /* Degradê mais vibrante */
+            background: linear-gradient(45deg, #FF0090, #A033FF);
+            margin: -40px -40px 40px -40px;
+            border-bottom-left-radius: 40% 15%;
+            border-bottom-right-radius: 40% 15%;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 3.5rem;
             color: #ffffff;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            font-weight: 900; /* Ultra Negrito */
+            font-family: 'Dancing Script', cursive; /* Fonte Manuscrita no Título */
+        }
+
+        h1 .heart-text {
+             font-size: 0.8em; /* Reduz ligeiramente o tamanho para contraste */
+             display: block; /* Quebra de linha para o "Meu Amor" */
+             margin-top: -10px;
+             font-family: 'Montserrat', sans-serif; /* Volta para a fonte principal */
+             font-weight: 300; /* Leve */
         }
         
+        /* Coração Pulsante */
         .heart {
-            color: #ff6b9d;
+            color: #ffb8c5; /* Coração mais claro */
             display: inline-block;
             animation: pulse 1.5s infinite;
         }
         
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
         }
         
+        /* Seção de Mensagem */
         .message-section {
-            margin-bottom: 30px;
-            padding: 25px;
-            background: linear-gradient(145deg, #252542, #1e1e38);
-            border-radius: 15px;
-            border: 1px solid #3d3d5c;
+            margin-bottom: 35px;
+            padding: 30px;
+            background-color: rgba(58, 1, 94, 0.3); /* Roxo mais transparente */
+            border-radius: 20px;
+            border: 1px solid rgba(160, 51, 255, 0.2); /* Borda mais suave */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .message-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         }
         
         h2 {
-            color: #c770e6;
-            margin-bottom: 20px;
+            color: #a033ff; /* Roxo suave para subtítulos */
+            margin-bottom: 25px;
             text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         p {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            text-align: justify;
+            margin-bottom: 20px;
+            font-size: 1.15rem;
+            font-weight: 300; /* Texto mais leve para leitura */
+            color: #c9c9d4;
+            text-align: justify; /* Justificando textos para visual moderno */
         }
-        
-        .highlight {
-            background: linear-gradient(90deg, #533483, #8a4baf);
-            padding: 5px 12px;
-            border-radius: 5px;
-            font-weight: bold;
-            color: #ffffff;
-        }
-        
-        .love-message {
-            background: linear-gradient(135deg, #ff6b9d, #c770e6);
-            padding: 25px;
-            margin: 25px 0;
-            border-radius: 15px;
+
+        .text-center {
             text-align: center;
+        }
+        
+        /* Destaque (Bold Minimalism) */
+        .highlight {
+            /* Degradê mais forte para destaque */
+            background: linear-gradient(90deg, #FF0090, #A033FF); 
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900; /* Ultra Negrito */
+            padding: 0; /* Remove padding */
+            border-radius: 0; /* Remove border-radius */
+            box-shadow: none; /* Remove box-shadow */
+            display: inline;
+        }
+        
+        /* Mensagem de Amor Central */
+        .love-message {
+            background: linear-gradient(135deg, #FF0090, #A033FF);
+            padding: 30px;
+            margin: 30px auto; /* Centraliza */
+            border-radius: 20px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+            max-width: 90%;
         }
         
         .love-message p {
             color: white;
-            font-weight: bold;
-            font-size: 1.3rem;
-            text-align: center;
+            font-weight: 900;
+            font-size: 1.6rem;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            line-height: 1.4;
+            font-style: italic; /* Dá um charme extra */
         }
 
-        .fofura-section {
-            background: linear-gradient(135deg, #4a235a, #6a2c8c);
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 15px;
-            border-left: 5px solid #ff6b9d;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
         }
-        
-        .qualities {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-            justify-content: center;
-        }
-        
-        .quality {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            flex: 1;
-            min-width: 120px;
-        }
-        
+
+        /* Botão */
         .kiss-button {
             display: block;
-            margin: 30px auto;
-            padding: 15px 40px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff6b9d, #c770e6);
+            margin: 40px auto;
+            padding: 18px 50px;
+            font-size: 1.7rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #FF0090, #A033FF);
             color: white;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transição suave */
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
         .kiss-button:hover {
-            transform: translateY(-3px);
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 15px #FF0090; /* Adiciona brilho sutil */
+        }
+
+        /* Rodapé */
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(160, 51, 255, 0.2); /* Linha divisória mais sutil */
+            color: #A033FF; /* Cor do rodapé */
+            font-size: 0.9rem;
+            font-weight: 300;
         }
         
+        /* Mensagem de Beijo (Interativa) - Foco no Neon/Glow */
         .kiss-message {
             position: fixed;
             top: 0;
@@ -154,140 +210,114 @@
             display: none;
             justify-content: center;
             align-items: center;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
+            cursor: pointer; /* Para dar a ideia de "fechar" ao clicar */
         }
         
         .kiss-text {
-            font-size: 4rem;
-            font-weight: bold;
-            color: #ff6b9d;
-            animation: kissPulse 1s infinite;
+            font-size: 5rem;
+            font-weight: 900;
+            color: #FF0090;
+            animation: kissPulse 1s infinite alternate;
+            /* Efeito Neon/Glow */
+            text-shadow: 0 0 10px #FF0090, 0 0 20px #A033FF, 0 0 40px #FF0090;
         }
         
         @keyframes kissPulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.1); opacity: 1; }
         }
         
-        footer {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #39394d;
-            color: #a78bfa;
-        }
-        
+        /* Responsividade */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2rem;
-            }
+            body { padding: 10px; }
+            .container { padding: 20px; }
             
-            .container {
-                padding: 15px;
-            }
+            h1 { font-size: 2.5rem; }
+            h1 .heart-text { font-size: 0.7em; }
             
-            .message-section {
-                padding: 15px;
-            }
+            .message-section { padding: 15px; }
             
-            .qualities {
-                flex-direction: column;
-            }
+            .love-message p { font-size: 1.3rem; }
             
             .kiss-button {
-                font-size: 1.2rem;
-                padding: 12px 30px;
+                font-size: 1.4rem;
+                padding: 15px 30px;
             }
             
-            .kiss-text {
-                font-size: 3rem;
-            }
+            .kiss-text { font-size: 3.5rem; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Para Maria <span class="heart">💖</span></h1>
+            <h1>Para Maria <span class="heart-text"><span class="heart">❤</span> Meu Amor</span></h1>
         </header>
         
         <section class="message-section">
-            <h2>Do fundo do meu coração</h2>
-            
-            <p>Maria, desde que eu comecei a falar com você - acho que vai fazer um mês e meio por aí - eu gostei MUITO de você de verdade.</p>
-            
-            <p>O seu jeito de ser e seu jeito de agir... Acho você <span class="highlight">muito fofaaaa</span> e maravilhosa!</p>
-            
-            <div class="fofura-section">
-                <p>Seu cabelo todo enrolandinho (cacheado kk) acho MUITO fofo de verdade! Te vejo quase todos os dias e sempre fico com vontade de te apertar de tanta fofura.</p>
-                <p>E seu jeito de falar, de rir quando estamos juntos, até mesmo sua expressão quando fica séria... Tudo em você me conquista mais a cada dia que te vejo.</p>
-            </div>
+            <h2>Você é Minha Estrela Guia <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">✨</span></h2>
             
             <div class="love-message">
-                <p>Você é incrível e especial 💖</p>
+                <p>Eu te amo muitooo, muito mesmo! Você é a pessoa mais importante da minha vidaa!</p>
             </div>
+
+            <p>
+                Meu coração sorri a cada mensagem, a cada olhar, a cada momento que passamos juntos. É como se o mundo ficasse mais colorido só por ter você nele.
+            </p>
             
-            <p>Mas tipo, as vezes não sei se você realmente gosta de mim mesmo, sei lá... Fico com medo de estar criando expectativas ou me iludindo.</p>
-            
-            <p>Mas de verdade saiba que eu <span class="highlight">Gosto MUITO de você</span> de verdade mesmo! Você é incrível e queria ter a oportunidade de ter te conhecido antes.</p>
-            
-            <p>Te vejo quase todos os dias e cada momento com você me deixa mais feliz. Seu sorriso sempre me alegra e quando sei que vou te ver, meu dia automaticamente fica melhor.</p>
+            <p>
+                Seu jeito meigo, seu sorriso que ilumina o dia e o seu abraço (que me faz esquecer de tudo) me fazem ter a certeza de que a nossa conexão é única e especial. Você é o motivo da minha felicidade!
+            </p>
         </section>
 
         <section class="message-section">
-            <h2>Coisas que Admiro em Você</h2>
+            <h2>Nossos Planos e Oração <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">🙏</span></h2>
             
-            <div class="qualities">
-                <div class="quality">
-                    <h3>💕 Fofura</h3>
-                    <p>Seu jeito único</p>
-                </div>
-                <div class="quality">
-                    <h3>👩‍🦰 Cabelo</h3>
-                    <p>Cacheado lindo</p>
-                </div>
-                <div class="quality">
-                    <h3>😊 Sorriso</h3>
-                    <p>Sempre me alegra</p>
-                </div>
-                <div class="quality">
-                    <h3>🌟 Presença</h3>
-                    <p>Ilumina meu dia</p>
-                </div>
+            <p>
+                Quero construir muitas memórias lindas ao seu lado. Se Deus quiser e nos permitir, a gente vai realizar todos os nossos sonhos, juntos.
+            </p>
+
+            <p>
+                Amo saber que temos essa fé e essa união. Saiba que eu <span class="highlight">oro por você</span> todos os dias. Que Deus continue abençoando o seu coração e o nosso caminho.
+            </p>
+
+            <div class="love-message" style="background: linear-gradient(135deg, #6e3d99, #3A015E);"> <p>Se Deus quiser, eu vou ir com você à igreja! Mal posso esperar para estarmos lá, lado a lado.</p>
             </div>
             
-            <p>Queria que você soubesse o quanto eu valorizo nossos momentos juntos. Pode parecer bobeira, mas pra mim significa muito te ver quase todo dia.</p>
-            
-            <p>Cada vez que a gente se encontra, tenho mais certeza de como você é especial. Ver você sempre me deixa feliz e animado!</p>
+            <p>
+                Cada dia que passa, o meu sentimento só cresce. É uma coisa que não dá para explicar, só para sentir. Você é a minha <span class="highlight">melhor surpresa</span>.
+            </p>
+
         </section>
 
         <section class="message-section">
-            <h2>Meus Sentimentos</h2>
+            <h2>Declaração Fofa (e Verdadeira!) <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">💖</span></h2>
             
-            <p>Depois de te conhecer melhor, senti uma conexão diferente. Ver você quase todo dia, conversar com você, tudo ficou mais especial.</p>
-            
-            <div class="love-message">
-                <p>"Seu sorriso sempre me alegra de um jeito que nem consigo explicar"</p>
-            </div>
-            
-            <p>Espero que a gente possa continuar nos vendo e nos conhecendo cada vez mais. Quero criar mais memórias ao seu lado.</p>
-            
-            <p>E mesmo que você não sinta o mesmo por mim, saiba que vou continuar te admirando e torcendo pela sua felicidade, porque você merece tudo de bom!</p>
+            <p class="text-center">
+                Você é mais que especial, é a <span class="highlight">metade do meu coração</span> que eu nem sabia que faltava.
+            </p>
 
-            <p>Te ver quase todos os dias me deixa animado. Sua energia, seu jeito, tudo faz eu querer te ver mais e mais.</p>
+            <p class="text-center">
+                Seu cheiro, seu cabelo, o som da sua risada... Tudo em você é a minha coisa favorita no mundo.
+            </p>
+
+            <p class="text-center">
+                Obrigado por existir e por me fazer a pessoa mais feliz quando estou ao seu lado. Amo você incondicionalmente!
+            </p>
         </section>
 
-        <button class="kiss-button" onclick="showKisses()">Clica aqui</button>
+        <button class="kiss-button" onclick="showKisses()">MANDA UM BEIJO!!</button>
         
         <footer>
-            <p>Com carinho e admiração 💖</p>
-            <p>Você é especial demais!</p>
+            <p>Com todo o amor do seu único admirador.</p>
+            <p>Você é simplesmente a melhor parte do meu dia! 😍</p>
         </footer>
     </div>
 
-    <div class="kiss-message" id="kissMessage">
-        <div class="kiss-text">Ti Amuu💖</div>
+    <div class="kiss-message" id="kissMessage" onclick="this.style.display='none'">
+        <div class="kiss-text">BEIJINHOSSS😘</div>
     </div>
 
     <script>
@@ -295,9 +325,10 @@
             const kissMessage = document.getElementById('kissMessage');
             kissMessage.style.display = 'flex';
             
+            // Oculta a mensagem depois de 3 segundos
             setTimeout(() => {
                 kissMessage.style.display = 'none';
-            }, 3000);
+            }, 3000); 
         }
     </script>
 </body>
