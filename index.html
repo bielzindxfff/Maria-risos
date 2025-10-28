@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmação Mobile</title>
+    <title>Confirmação Multi-Dispositivo</title>
     <style>
         :root {
             --cor-fundo: #0a0a0a;
@@ -29,7 +29,7 @@
             color: var(--cor-texto);
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 80px; /* Espaço para o botão flutuante */
+            padding-bottom: 80px;
         }
         
         .container {
@@ -361,6 +361,17 @@
             animation: blink 1s infinite;
         }
         
+        .status-sincronizacao {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: var(--cor-texto-secundario);
+        }
+        
+        .status-online {
+            color: var(--cor-botao-sim);
+        }
+        
         /* Animações */
         @keyframes blink {
             0%, 50% { opacity: 1; }
@@ -450,6 +461,10 @@
                 <div class="ponto" id="ponto3"></div>
             </div>
         </div>
+        
+        <div class="status-sincronizacao">
+            <span class="status-online">●</span> Sincronizado entre dispositivos
+        </div>
     </div>
 
     <!-- Botão Flutuante -->
@@ -484,15 +499,49 @@
     <script>
         // Sistema de senha
         const SENHA_CORRETA = "123456";
+        const CHAVE_ARMAZENAMENTO = "respostasCompartilhadasGlobal";
         let autenticado = localStorage.getItem('autenticado') === 'true';
         let respostas = [];
         let ultimaAtualizacao = 0;
         
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            carregarRespostas();
+            console.log("Sistema iniciado - Carregando respostas...");
+            inicializarSincronizacao();
             atualizarBotaoFlutuante();
+            
+            // Verificar se já existem respostas
+            const respostasExistentes = carregarRespostas();
+            console.log("Respostas carregadas:", respostasExistentes.length);
         });
+        
+        // Sistema de sincronização melhorado
+        function inicializarSincronizacao() {
+            // Forçar sincronização inicial
+            sincronizarRespostas();
+            
+            // Sincronizar a cada 2 segundos
+            setInterval(sincronizarRespostas, 2000);
+            
+            // Também sincronizar quando a página ganha foco
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    sincronizarRespostas();
+                }
+            });
+        }
+        
+        function sincronizarRespostas() {
+            const agora = Date.now();
+            const ultimaSincronizacao = localStorage.getItem('ultimaSincronizacao') || 0;
+            
+            // Sincronizar a cada 2 segundos ou quando houver mudanças
+            if (agora - ultimaSincronizacao > 2000) {
+                const respostasAtuais = carregarRespostas();
+                atualizarInterfaceRespostas(respostasAtuais);
+                localStorage.setItem('ultimaSincronizacao', agora);
+            }
+        }
         
         // Funções do questionário
         function avancarEtapa(etapaAtual, resposta) {
@@ -541,21 +590,36 @@
             document.getElementById('etapa1').classList.add('ativa');
         }
         
-        // Sistema de compartilhamento
+        // Sistema de compartilhamento CORRIGIDO
         function salvarResposta() {
             const respostaCompleta = {
-                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 8),
                 respostas: [...respostas],
                 data: new Date().toISOString(),
-                dispositivo: getDispositivoInfo()
+                dispositivo: getDispositivoInfo(),
+                timestamp: Date.now()
             };
             
-            let todasRespostas = JSON.parse(localStorage.getItem('respostasCompartilhadas')) || [];
-            todasRespostas.push(respostaCompleta);
-            localStorage.setItem('respostasCompartilhadas', JSON.stringify(todasRespostas));
+            console.log("Salvando resposta:", respostaCompleta);
             
-            localStorage.setItem('ultimaResposta', Date.now().toString());
+            let todasRespostas = carregarRespostas();
+            todasRespostas.push(respostaCompleta);
+            
+            // Ordenar por timestamp (mais recente primeiro)
+            todasRespostas.sort((a, b) => b.timestamp - a.timestamp);
+            
+            // Manter apenas as últimas 50 respostas para evitar sobrecarga
+            if (todasRespostas.length > 50) {
+                todasRespostas = todasRespostas.slice(0, 50);
+            }
+            
+            localStorage.setItem(CHAVE_ARMAZENAMENTO, JSON.stringify(todasRespostas));
+            localStorage.setItem('ultimaRespostaGlobal', Date.now().toString());
+            
+            console.log("Total de respostas salvas:", todasRespostas.length);
+            
             atualizarBotaoFlutuante();
+            sincronizarRespostas(); // Forçar sincronização imediata
         }
         
         function getDispositivoInfo() {
@@ -564,7 +628,13 @@
         }
         
         function carregarRespostas() {
-            return JSON.parse(localStorage.getItem('respostasCompartilhadas')) || [];
+            try {
+                const respostasSalvas = localStorage.getItem(CHAVE_ARMAZENAMENTO);
+                return respostasSalvas ? JSON.parse(respostasSalvas) : [];
+            } catch (e) {
+                console.error("Erro ao carregar respostas:", e);
+                return [];
+            }
         }
         
         // Funções do modal e senha
@@ -633,14 +703,15 @@
             if (autenticado) {
                 btn.classList.add('ativo');
                 btn.innerHTML = '📊';
+                btn.setAttribute('data-count', respostas.length);
             } else {
                 btn.classList.remove('ativo');
                 btn.innerHTML = '🔒';
-            }
-            
-            // Mostrar badge com número de respostas
-            if (respostas.length > 0) {
-                btn.setAttribute('data-count', respostas.length);
+                if (respostas.length > 0) {
+                    btn.setAttribute('data-count', respostas.length);
+                } else {
+                    btn.removeAttribute('data-count');
+                }
             }
         }
         
@@ -648,6 +719,10 @@
             if (!autenticado) return;
             
             const respostas = carregarRespostas();
+            atualizarInterfaceRespostas(respostas);
+        }
+        
+        function atualizarInterfaceRespostas(respostas) {
             const lista = document.getElementById('lista-respostas');
             const contador = document.getElementById('contador-respostas');
             
@@ -658,14 +733,9 @@
                 return;
             }
             
-            respostas.sort((a, b) => new Date(b.data) - new Date(a.data));
-            
-            lista.innerHTML = '';
+            let html = '';
             
             respostas.forEach((resposta, index) => {
-                const item = document.createElement('div');
-                item.className = 'resposta-item';
-                
                 const data = new Date(resposta.data).toLocaleString();
                 const tempoPassado = calcularTempoPassado(resposta.data);
                 
@@ -679,25 +749,27 @@
                     </div>
                 `).join('');
                 
-                item.innerHTML = `
-                    <div class="resposta-info">
-                        <span>${resposta.dispositivo}</span>
-                        <span>${tempoPassado}</span>
-                    </div>
-                    <div class="resposta-conteudo">
-                        <strong>${resultado}</strong>
-                        ${index === 0 ? '<span class="novo-badge">NOVO</span>' : ''}
-                    </div>
-                    <div class="resposta-etapas">
-                        ${etapasHTML}
-                    </div>
-                    <div class="resposta-info">
-                        <span>${data}</span>
+                html += `
+                    <div class="resposta-item">
+                        <div class="resposta-info">
+                            <span>${resposta.dispositivo}</span>
+                            <span>${tempoPassado}</span>
+                        </div>
+                        <div class="resposta-conteudo">
+                            <strong>${resultado}</strong>
+                            ${index === 0 ? '<span class="novo-badge">NOVO</span>' : ''}
+                        </div>
+                        <div class="resposta-etapas">
+                            ${etapasHTML}
+                        </div>
+                        <div class="resposta-info">
+                            <span>${data}</span>
+                        </div>
                     </div>
                 `;
-                
-                lista.appendChild(item);
             });
+            
+            lista.innerHTML = html;
         }
         
         function calcularTempoPassado(dataString) {
@@ -713,19 +785,7 @@
             return `Há ${Math.floor(diffHours / 24)} dias`;
         }
         
-        // Verificar novas respostas periodicamente
-        setInterval(() => {
-            if (autenticado) {
-                const ultimaResposta = localStorage.getItem('ultimaResposta');
-                if (ultimaResposta && parseInt(ultimaResposta) > ultimaAtualizacao) {
-                    ultimaAtualizacao = parseInt(ultimaResposta);
-                    atualizarListaRespostas();
-                    atualizarBotaoFlutuante();
-                }
-            }
-        }, 3000);
-        
-        // CSS para animação de shake
+        // CSS para animação de shake e badge
         const style = document.createElement('style');
         style.textContent = `
             @keyframes shake {
