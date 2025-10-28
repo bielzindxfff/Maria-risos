@@ -463,7 +463,7 @@
         </div>
         
         <div class="status-sincronizacao">
-            <span class="status-online">●</span> Sincronizado entre dispositivos
+            <span class="status-online">●</span> <span id="status-texto">Conectado</span>
         </div>
     </div>
 
@@ -497,56 +497,79 @@
     </div>
 
     <script>
-        // Sistema de senha
+        // Sistema de sincronização REAL
         const SENHA_CORRETA = "123456";
-        const CHAVE_ARMAZENAMENTO = "respostasCompartilhadasGlobal";
-        let autenticado = localStorage.getItem('autenticado') === 'true';
-        let respostas = [];
-        let ultimaAtualizacao = 0;
+        const CHAVE_RESPOSTAS = "sistemaConfirmacaoRespostas";
+        const CHAVE_ULTIMA_ATUALIZACAO = "sistemaConfirmacaoUltimaAtt";
         
-        // Inicializar
+        let autenticado = localStorage.getItem('autenticado') === 'true';
+        let respostasAtuais = [];
+        let intervaloVerificacao;
+        
+        // Inicializar sistema
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("Sistema iniciado - Carregando respostas...");
-            inicializarSincronizacao();
-            atualizarBotaoFlutuante();
-            
-            // Verificar se já existem respostas
-            const respostasExistentes = carregarRespostas();
-            console.log("Respostas carregadas:", respostasExistentes.length);
+            console.log("🚀 Sistema iniciado");
+            inicializarSistema();
+            iniciarVerificacaoContinua();
         });
         
-        // Sistema de sincronização melhorado
-        function inicializarSincronizacao() {
-            // Forçar sincronização inicial
-            sincronizarRespostas();
+        function inicializarSistema() {
+            // Carregar respostas existentes
+            respostasAtuais = carregarRespostas();
+            console.log(`📊 ${respostasAtuais.length} respostas carregadas`);
             
-            // Sincronizar a cada 2 segundos
-            setInterval(sincronizarRespostas, 2000);
+            // Atualizar interface
+            atualizarBotaoFlutuante();
+            atualizarStatusSincronizacao();
             
-            // Também sincronizar quando a página ganha foco
+            // Se já estiver autenticado, mostrar respostas
+            if (autenticado && document.getElementById('modal-respostas').style.display === 'flex') {
+                mostrarRespostas();
+            }
+        }
+        
+        function iniciarVerificacaoContinua() {
+            // Verificar a cada 1 segundo
+            intervaloVerificacao = setInterval(verificarAtualizacoes, 1000);
+            
+            // Verificar quando a página fica visível
             document.addEventListener('visibilitychange', function() {
                 if (!document.hidden) {
-                    sincronizarRespostas();
+                    verificarAtualizacoes();
                 }
             });
         }
         
-        function sincronizarRespostas() {
-            const agora = Date.now();
-            const ultimaSincronizacao = localStorage.getItem('ultimaSincronizacao') || 0;
+        function verificarAtualizacoes() {
+            const ultimaAttRemota = localStorage.getItem(CHAVE_ULTIMA_ATUALIZACAO);
+            const ultimaAttLocal = localStorage.getItem('ultimaAttLocal') || '0';
             
-            // Sincronizar a cada 2 segundos ou quando houver mudanças
-            if (agora - ultimaSincronizacao > 2000) {
-                const respostasAtuais = carregarRespostas();
-                atualizarInterfaceRespostas(respostasAtuais);
-                localStorage.setItem('ultimaSincronizacao', agora);
+            if (ultimaAttRemota && parseInt(ultimaAttRemota) > parseInt(ultimaAttLocal)) {
+                console.log("🔄 Nova atualização detectada!");
+                respostasAtuais = carregarRespostas();
+                atualizarInterfaceRespostas();
+                atualizarBotaoFlutuante();
+                localStorage.setItem('ultimaAttLocal', ultimaAttRemota);
+                atualizarStatusSincronizacao();
             }
+        }
+        
+        function atualizarStatusSincronizacao() {
+            const statusElement = document.getElementById('status-texto');
+            const totalRespostas = respostasAtuais.length;
+            statusElement.textContent = `Sincronizado • ${totalRespostas} resposta${totalRespostas !== 1 ? 's' : ''}`;
         }
         
         // Funções do questionário
         function avancarEtapa(etapaAtual, resposta) {
-            respostas[etapaAtual - 1] = resposta;
+            const etapas = [1, 2];
+            const respostasUsuario = JSON.parse(localStorage.getItem('respostasUsuario')) || [];
             
+            // Salvar resposta atual
+            respostasUsuario[etapaAtual - 1] = resposta;
+            localStorage.setItem('respostasUsuario', JSON.stringify(respostasUsuario));
+            
+            // Atualizar interface
             document.getElementById(`etapa${etapaAtual}`).classList.remove('ativa');
             document.getElementById(`ponto${etapaAtual}`).classList.remove('ativo');
             
@@ -557,32 +580,71 @@
                 document.getElementById('resultado').classList.add('ativa');
                 document.getElementById('ponto3').classList.add('ativo');
                 
-                salvarResposta();
+                // Salvar resposta completa
+                salvarRespostaCompleta(respostasUsuario);
                 
-                let resultadoTexto = '';
-                let respostaFinal = '';
-                
-                if (respostas[0] === true && respostas[1] === true) {
-                    resultadoTexto = 'Decisão Confirmada!';
-                    respostaFinal = '✅ Sim para ambas as perguntas';
-                } else if (respostas[0] === true && respostas[1] === false) {
-                    resultadoTexto = 'Hesitação Detectada';
-                    respostaFinal = '✅ Sim → ❌ Não';
-                } else if (respostas[0] === false && respostas[1] === true) {
-                    resultadoTexto = 'Mudança de Ideia';
-                    respostaFinal = '❌ Não → ✅ Sim';
-                } else {
-                    resultadoTexto = 'Decisão Negativa';
-                    respostaFinal = '❌ Não para ambas as perguntas';
-                }
-                
-                document.getElementById('texto-resultado').textContent = resultadoTexto;
-                document.getElementById('resposta-final').textContent = respostaFinal;
+                // Mostrar resultado
+                mostrarResultado(respostasUsuario);
             }
         }
         
+        function salvarRespostaCompleta(respostas) {
+            const respostaCompleta = {
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                respostas: [...respostas],
+                data: new Date().toISOString(),
+                dispositivo: getDispositivoInfo(),
+                timestamp: Date.now()
+            };
+            
+            console.log("💾 Salvando resposta:", respostaCompleta);
+            
+            // Adicionar à lista de respostas
+            respostasAtuais.unshift(respostaCompleta); // Adicionar no início
+            
+            // Manter apenas as últimas 100 respostas
+            if (respostasAtuais.length > 100) {
+                respostasAtuais = respostasAtuais.slice(0, 100);
+            }
+            
+            // Salvar no localStorage
+            localStorage.setItem(CHAVE_RESPOSTAS, JSON.stringify(respostasAtuais));
+            localStorage.setItem(CHAVE_ULTIMA_ATUALIZACAO, Date.now().toString());
+            
+            console.log("✅ Resposta salva. Total:", respostasAtuais.length);
+            
+            // Atualizar interface
+            atualizarBotaoFlutuante();
+            atualizarStatusSincronizacao();
+            
+            // Limpar respostas do usuário
+            localStorage.removeItem('respostasUsuario');
+        }
+        
+        function mostrarResultado(respostas) {
+            let resultadoTexto = '';
+            let respostaFinal = '';
+            
+            if (respostas[0] === true && respostas[1] === true) {
+                resultadoTexto = 'Decisão Confirmada!';
+                respostaFinal = '✅ Sim para ambas as perguntas';
+            } else if (respostas[0] === true && respostas[1] === false) {
+                resultadoTexto = 'Hesitação Detectada';
+                respostaFinal = '✅ Sim → ❌ Não';
+            } else if (respostas[0] === false && respostas[1] === true) {
+                resultadoTexto = 'Mudança de Ideia';
+                respostaFinal = '❌ Não → ✅ Sim';
+            } else {
+                resultadoTexto = 'Decisão Negativa';
+                respostaFinal = '❌ Não para ambas as perguntas';
+            }
+            
+            document.getElementById('texto-resultado').textContent = resultadoTexto;
+            document.getElementById('resposta-final').textContent = respostaFinal;
+        }
+        
         function reiniciar() {
-            respostas = [];
+            localStorage.removeItem('respostasUsuario');
             document.getElementById('resultado').classList.remove('ativa');
             document.getElementById('ponto1').classList.add('ativo');
             document.getElementById('ponto2').classList.remove('ativo');
@@ -590,51 +652,22 @@
             document.getElementById('etapa1').classList.add('ativa');
         }
         
-        // Sistema de compartilhamento CORRIGIDO
-        function salvarResposta() {
-            const respostaCompleta = {
-                id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 8),
-                respostas: [...respostas],
-                data: new Date().toISOString(),
-                dispositivo: getDispositivoInfo(),
-                timestamp: Date.now()
-            };
-            
-            console.log("Salvando resposta:", respostaCompleta);
-            
-            let todasRespostas = carregarRespostas();
-            todasRespostas.push(respostaCompleta);
-            
-            // Ordenar por timestamp (mais recente primeiro)
-            todasRespostas.sort((a, b) => b.timestamp - a.timestamp);
-            
-            // Manter apenas as últimas 50 respostas para evitar sobrecarga
-            if (todasRespostas.length > 50) {
-                todasRespostas = todasRespostas.slice(0, 50);
+        // Sistema de armazenamento
+        function carregarRespostas() {
+            try {
+                const respostasSalvas = localStorage.getItem(CHAVE_RESPOSTAS);
+                if (respostasSalvas) {
+                    return JSON.parse(respostasSalvas);
+                }
+            } catch (e) {
+                console.error("❌ Erro ao carregar respostas:", e);
             }
-            
-            localStorage.setItem(CHAVE_ARMAZENAMENTO, JSON.stringify(todasRespostas));
-            localStorage.setItem('ultimaRespostaGlobal', Date.now().toString());
-            
-            console.log("Total de respostas salvas:", todasRespostas.length);
-            
-            atualizarBotaoFlutuante();
-            sincronizarRespostas(); // Forçar sincronização imediata
+            return [];
         }
         
         function getDispositivoInfo() {
             const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             return mobile ? '📱 Mobile' : '💻 Desktop';
-        }
-        
-        function carregarRespostas() {
-            try {
-                const respostasSalvas = localStorage.getItem(CHAVE_ARMAZENAMENTO);
-                return respostasSalvas ? JSON.parse(respostasSalvas) : [];
-            } catch (e) {
-                console.error("Erro ao carregar respostas:", e);
-                return [];
-            }
         }
         
         // Funções do modal e senha
@@ -693,49 +726,44 @@
         function mostrarRespostas() {
             document.getElementById('area-senha').style.display = 'none';
             document.getElementById('lista-respostas').style.display = 'block';
-            atualizarListaRespostas();
+            atualizarInterfaceRespostas();
         }
         
         function atualizarBotaoFlutuante() {
             const btn = document.getElementById('btn-flutuante');
-            const respostas = carregarRespostas();
+            const totalRespostas = respostasAtuais.length;
             
             if (autenticado) {
                 btn.classList.add('ativo');
                 btn.innerHTML = '📊';
-                btn.setAttribute('data-count', respostas.length);
+                btn.setAttribute('data-count', totalRespostas);
             } else {
                 btn.classList.remove('ativo');
                 btn.innerHTML = '🔒';
-                if (respostas.length > 0) {
-                    btn.setAttribute('data-count', respostas.length);
+                if (totalRespostas > 0) {
+                    btn.setAttribute('data-count', totalRespostas);
                 } else {
                     btn.removeAttribute('data-count');
                 }
             }
         }
         
-        function atualizarListaRespostas() {
+        function atualizarInterfaceRespostas() {
             if (!autenticado) return;
             
-            const respostas = carregarRespostas();
-            atualizarInterfaceRespostas(respostas);
-        }
-        
-        function atualizarInterfaceRespostas(respostas) {
             const lista = document.getElementById('lista-respostas');
             const contador = document.getElementById('contador-respostas');
             
-            contador.textContent = respostas.length;
+            contador.textContent = respostasAtuais.length;
             
-            if (respostas.length === 0) {
+            if (respostasAtuais.length === 0) {
                 lista.innerHTML = '<div class="sem-respostas">Nenhuma resposta ainda</div>';
                 return;
             }
             
             let html = '';
             
-            respostas.forEach((resposta, index) => {
+            respostasAtuais.forEach((resposta, index) => {
                 const data = new Date(resposta.data).toLocaleString();
                 const tempoPassado = calcularTempoPassado(resposta.data);
                 
