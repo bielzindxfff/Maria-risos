@@ -1,335 +1,757 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Maria, Meu Amor</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
-    
+    <title>Confirmação Mobile</title>
     <style>
-        /* Paleta de Cores:
-        Fundo Escuro: #17101F (Quase preto, roxo escuro)
-        Roxo Profundo: #3A015E
-        Magenta Vibrante: #FF0090
-        Roxo Suave: #A033FF
-        Texto Claro: #f0f0f5
-        */
-
-        /* Estilos Globais e Fundo */
+        :root {
+            --cor-fundo: #0a0a0a;
+            --cor-card: #1a1a1a;
+            --cor-texto: #ffffff;
+            --cor-texto-secundario: #888;
+            --cor-borda: #333;
+            --cor-botao-sim: #00ff88;
+            --cor-botao-nao: #ff4444;
+            --cor-destaque: #6200ea;
+            --cor-erro: #ff4444;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif; /* Fonte Primária Moderna */
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #17101F, #3A015E, #17101F);
-            color: #f0f0f5;
-            line-height: 1.6;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto);
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 80px; /* Espaço para o botão flutuante */
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cor-borda);
+        }
+        
+        .titulo {
+            font-size: 1.8rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .subtitulo {
+            color: var(--cor-texto-secundario);
+            font-size: 1rem;
+        }
+        
+        /* Card de Perguntas */
+        .card {
+            background-color: var(--cor-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--cor-borda);
+            margin-bottom: 20px;
+        }
+        
+        .etapa {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .etapa.ativa {
+            display: block;
+        }
+        
+        .numero-etapa {
+            color: var(--cor-texto-secundario);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        
+        .pergunta {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+            line-height: 1.4;
+            text-align: center;
+        }
+        
+        .botoes {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+            max-width: 140px;
+        }
+        
+        .btn-sim {
+            background-color: var(--cor-botao-sim);
+            color: #000;
+        }
+        
+        .btn-nao {
+            background-color: var(--cor-botao-nao);
+            color: #fff;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .progresso {
             display: flex;
             justify-content: center;
-            align-items: center; /* Centraliza o conteúdo verticalmente */
+            margin-top: 30px;
+            gap: 8px;
         }
         
-        /* Container Principal (Glassmorphism sutil) */
-        .container {
-            max-width: 800px;
-            width: 95%;
-            background-color: rgba(30, 16, 46, 0.6); /* Mais transparência */
-            backdrop-filter: blur(10px); /* Efeito de vidro */
-            border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            overflow: hidden;
-            padding: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
+        .ponto {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--cor-borda);
+            transition: background-color 0.3s ease;
         }
         
-        /* Cabeçalho */
-        header {
-            text-align: center;
-            padding: 40px 0;
-            /* Degradê mais vibrante */
-            background: linear-gradient(45deg, #FF0090, #A033FF);
-            margin: -40px -40px 40px -40px;
-            border-bottom-left-radius: 40% 15%;
-            border-bottom-right-radius: 40% 15%;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+        .ponto.ativo {
+            background-color: var(--cor-texto);
         }
         
-        h1 {
-            font-size: 3.5rem;
-            color: #ffffff;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-            font-weight: 900; /* Ultra Negrito */
-            font-family: 'Dancing Script', cursive; /* Fonte Manuscrita no Título */
-        }
-
-        h1 .heart-text {
-             font-size: 0.8em; /* Reduz ligeiramente o tamanho para contraste */
-             display: block; /* Quebra de linha para o "Meu Amor" */
-             margin-top: -10px;
-             font-family: 'Montserrat', sans-serif; /* Volta para a fonte principal */
-             font-weight: 300; /* Leve */
-        }
-        
-        /* Coração Pulsante */
-        .heart {
-            color: #ffb8c5; /* Coração mais claro */
-            display: inline-block;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.9; }
-        }
-        
-        /* Seção de Mensagem */
-        .message-section {
-            margin-bottom: 35px;
-            padding: 30px;
-            background-color: rgba(58, 1, 94, 0.3); /* Roxo mais transparente */
-            border-radius: 20px;
-            border: 1px solid rgba(160, 51, 255, 0.2); /* Borda mais suave */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .message-section:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-        }
-        
-        h2 {
-            color: #a033ff; /* Roxo suave para subtítulos */
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        p {
-            margin-bottom: 20px;
-            font-size: 1.15rem;
-            font-weight: 300; /* Texto mais leve para leitura */
-            color: #c9c9d4;
-            text-align: justify; /* Justificando textos para visual moderno */
-        }
-
-        .text-center {
+        .resultado {
+            font-size: 1.2rem;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
             text-align: center;
         }
         
-        /* Destaque (Bold Minimalism) */
-        .highlight {
-            /* Degradê mais forte para destaque */
-            background: linear-gradient(90deg, #FF0090, #A033FF); 
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 900; /* Ultra Negrito */
-            padding: 0; /* Remove padding */
-            border-radius: 0; /* Remove border-radius */
-            box-shadow: none; /* Remove box-shadow */
-            display: inline;
-        }
-        
-        /* Mensagem de Amor Central */
-        .love-message {
-            background: linear-gradient(135deg, #FF0090, #A033FF);
-            padding: 30px;
-            margin: 30px auto; /* Centraliza */
-            border-radius: 20px;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-            max-width: 90%;
-        }
-        
-        .love-message p {
-            color: white;
-            font-weight: 900;
-            font-size: 1.6rem;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            line-height: 1.4;
-            font-style: italic; /* Dá um charme extra */
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Botão */
-        .kiss-button {
-            display: block;
-            margin: 40px auto;
-            padding: 18px 50px;
-            font-size: 1.7rem;
-            font-weight: 900;
-            background: linear-gradient(45deg, #FF0090, #A033FF);
-            color: white;
+        /* Botão Flutuante */
+        .btn-flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cor-destaque), #7c3aed);
             border: none;
-            border-radius: 50px;
+            color: white;
+            font-size: 1.5rem;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Transição suave */
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(106, 17, 203, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
-        .kiss-button:hover {
-            transform: translateY(-8px) scale(1.05);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6), 0 0 15px #FF0090; /* Adiciona brilho sutil */
-        }
-
-        /* Rodapé */
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(160, 51, 255, 0.2); /* Linha divisória mais sutil */
-            color: #A033FF; /* Cor do rodapé */
-            font-size: 0.9rem;
-            font-weight: 300;
+        .btn-flutuante:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(106, 17, 203, 0.6);
         }
         
-        /* Mensagem de Beijo (Interativa) - Foco no Neon/Glow */
-        .kiss-message {
+        .btn-flutuante.ativo {
+            background: linear-gradient(135deg, var(--cor-botao-sim), #00cc6a);
+        }
+        
+        /* Modal de Respostas */
+        .modal {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: none;
-            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
             align-items: center;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            cursor: pointer; /* Para dar a ideia de "fechar" ao clicar */
+            justify-content: center;
+            padding: 20px;
         }
         
-        .kiss-text {
-            font-size: 5rem;
-            font-weight: 900;
-            color: #FF0090;
-            animation: kissPulse 1s infinite alternate;
-            /* Efeito Neon/Glow */
-            text-shadow: 0 0 10px #FF0090, 0 0 20px #A033FF, 0 0 40px #FF0090;
+        .modal-content {
+            background-color: var(--cor-card);
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--cor-borda);
         }
         
-        @keyframes kissPulse {
-            0% { transform: scale(1); opacity: 0.9; }
-            100% { transform: scale(1.1); opacity: 1; }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--cor-borda);
         }
         
-        /* Responsividade */
-        @media (max-width: 600px) {
-            body { padding: 10px; }
-            .container { padding: 20px; }
-            
-            h1 { font-size: 2.5rem; }
-            h1 .heart-text { font-size: 0.7em; }
-            
-            .message-section { padding: 15px; }
-            
-            .love-message p { font-size: 1.3rem; }
-            
-            .kiss-button {
-                font-size: 1.4rem;
-                padding: 15px 30px;
+        .modal-titulo {
+            font-size: 1.4rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .contador {
+            background-color: var(--cor-destaque);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .fechar {
+            color: var(--cor-texto-secundario);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .fechar:hover {
+            color: var(--cor-texto);
+        }
+        
+        /* Área de Senha */
+        .area-senha {
+            text-align: center;
+            padding: 30px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .senha-input {
+            width: 100%;
+            padding: 16px;
+            background-color: #2a2a2a;
+            border: 1px solid var(--cor-borda);
+            border-radius: 12px;
+            color: var(--cor-texto);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .senha-input:focus {
+            outline: none;
+            border-color: var(--cor-destaque);
+            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+        }
+        
+        .mensagem-erro {
+            color: var(--cor-erro);
+            margin: 15px 0;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        /* Lista de Respostas */
+        .lista-respostas {
+            flex: 1;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .resposta-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--cor-destaque);
+            animation: slideIn 0.3s ease;
+        }
+        
+        .resposta-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--cor-texto-secundario);
+        }
+        
+        .resposta-conteudo {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .resposta-etapas {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .etapa-resposta {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .etapa-sim {
+            background-color: rgba(0, 255, 136, 0.2);
+            border: 1px solid var(--cor-botao-sim);
+        }
+        
+        .etapa-nao {
+            background-color: rgba(255, 68, 68, 0.2);
+            border: 1px solid var(--cor-botao-nao);
+        }
+        
+        .sem-respostas {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--cor-texto-secundario);
+            font-style: italic;
+        }
+        
+        .novo-badge {
+            background-color: var(--cor-botao-sim);
+            color: #000;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        /* Animações */
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .card {
+                padding: 20px 15px;
             }
             
-            .kiss-text { font-size: 3.5rem; }
+            .pergunta {
+                font-size: 1.3rem;
+            }
+            
+            .btn {
+                padding: 14px 20px;
+                font-size: 1rem;
+            }
+            
+            .modal-content {
+                padding: 20px 15px;
+            }
+            
+            .btn-flutuante {
+                width: 55px;
+                height: 55px;
+                bottom: 15px;
+                right: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Para Maria <span class="heart-text"><span class="heart">❤</span> Meu Amor</span></h1>
-        </header>
+        <div class="header">
+            <h1 class="titulo">Sistema de Confirmação</h1>
+            <p class="subtitulo">Responda às perguntas abaixo</p>
+        </div>
         
-        <section class="message-section">
-            <h2>Você é Minha Estrela Guia <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">✨</span></h2>
-            
-            <div class="love-message">
-                <p>Eu te amo muitooo, muito mesmo! Você é a pessoa mais importante da minha vidaa!</p>
-            </div>
-
-            <p>
-                Meu coração sorri a cada mensagem, a cada olhar, a cada momento que passamos juntos. É como se o mundo ficasse mais colorido só por ter você nele.
-            </p>
-            
-            <p>
-                Seu jeito meigo, seu sorriso que ilumina o dia e o seu abraço (que me faz esquecer de tudo) me fazem ter a certeza de que a nossa conexão é única e especial. Você é o motivo da minha felicidade!
-            </p>
-        </section>
-
-        <section class="message-section">
-            <h2>Nossos Planos e Oração <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">🙏</span></h2>
-            
-            <p>
-                Quero construir muitas memórias lindas ao seu lado. Se Deus quiser e nos permitir, a gente vai realizar todos os nossos sonhos, juntos.
-            </p>
-
-            <p>
-                Amo saber que temos essa fé e essa união. Saiba que eu <span class="highlight">oro por você</span> todos os dias. Que Deus continue abençoando o seu coração e o nosso caminho.
-            </p>
-
-            <div class="love-message" style="background: linear-gradient(135deg, #6e3d99, #3A015E);"> <p>Se Deus quiser, eu vou ir com você à igreja! Mal posso esperar para estarmos lá, lado a lado.</p>
+        <div class="card">
+            <!-- Etapa 1 -->
+            <div class="etapa ativa" id="etapa1">
+                <div class="numero-etapa">PERGUNTA 1 DE 2</div>
+                <div class="pergunta">Vamos começar?</div>
+                <div class="botoes">
+                    <button class="btn btn-sim" onclick="avancarEtapa(1, true)">Sim</button>
+                    <button class="btn btn-nao" onclick="avancarEtapa(1, false)">Não</button>
+                </div>
             </div>
             
-            <p>
-                Cada dia que passa, o meu sentimento só cresce. É uma coisa que não dá para explicar, só para sentir. Você é a minha <span class="highlight">melhor surpresa</span>.
-            </p>
-
-        </section>
-
-        <section class="message-section">
-            <h2>Declaração Fofa (e Verdadeira!) <span class="highlight" style="background: none; -webkit-text-fill-color: initial;">💖</span></h2>
+            <!-- Etapa 2 -->
+            <div class="etapa" id="etapa2">
+                <div class="numero-etapa">PERGUNTA 2 DE 2</div>
+                <div class="pergunta">Tem certeza??</div>
+                <div class="botoes">
+                    <button class="btn btn-sim" onclick="avancarEtapa(2, true)">Sim</button>
+                    <button class="btn btn-nao" onclick="avancarEtapa(2, false)">Não</button>
+                </div>
+            </div>
             
-            <p class="text-center">
-                Você é mais que especial, é a <span class="highlight">metade do meu coração</span> que eu nem sabia que faltava.
-            </p>
-
-            <p class="text-center">
-                Seu cheiro, seu cabelo, o som da sua risada... Tudo em você é a minha coisa favorita no mundo.
-            </p>
-
-            <p class="text-center">
-                Obrigado por existir e por me fazer a pessoa mais feliz quando estou ao seu lado. Amo você incondicionalmente!
-            </p>
-        </section>
-
-        <button class="kiss-button" onclick="showKisses()">MANDA UM BEIJO!!</button>
-        
-        <footer>
-            <p>Com todo o amor do seu único admirador.</p>
-            <p>Você é simplesmente a melhor parte do meu dia! 😍</p>
-        </footer>
+            <!-- Resultado -->
+            <div class="etapa" id="resultado">
+                <div class="pergunta" id="texto-resultado">Resultado</div>
+                <div class="resultado" id="resposta-final">
+                    Aguardando resposta...
+                </div>
+                <div class="botoes">
+                    <button class="btn btn-sim" onclick="reiniciar()">Fazer Novamente</button>
+                </div>
+            </div>
+            
+            <div class="progresso">
+                <div class="ponto ativo" id="ponto1"></div>
+                <div class="ponto" id="ponto2"></div>
+                <div class="ponto" id="ponto3"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="kiss-message" id="kissMessage" onclick="this.style.display='none'">
-        <div class="kiss-text">BEIJINHOSSS😘</div>
+    <!-- Botão Flutuante -->
+    <button class="btn-flutuante" id="btn-flutuante" onclick="abrirModal()">🔒</button>
+
+    <!-- Modal de Respostas -->
+    <div class="modal" id="modal-respostas">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-titulo">
+                    Respostas Protegidas
+                    <span class="contador" id="contador-respostas">0</span>
+                </h2>
+                <span class="fechar" onclick="fecharModal()">&times;</span>
+            </div>
+            
+            <!-- Área de Senha -->
+            <div class="area-senha" id="area-senha">
+                <h3 style="margin-bottom: 25px; color: var(--cor-texto-secundario); font-size: 1.1rem;">🔒 Acesso Restrito</h3>
+                <input type="password" class="senha-input" id="input-senha" placeholder="Digite a senha" onkeypress="verificarEnter(event)">
+                <button class="btn btn-sim" onclick="verificarSenha()" style="max-width: 200px; margin: 0 auto;">Acessar</button>
+                <div class="mensagem-erro" id="mensagem-erro">Senha incorreta!</div>
+            </div>
+            
+            <!-- Lista de Respostas -->
+            <div class="lista-respostas" id="lista-respostas">
+                <div class="sem-respostas">Carregando respostas...</div>
+            </div>
+        </div>
     </div>
 
     <script>
-        function showKisses() {
-            const kissMessage = document.getElementById('kissMessage');
-            kissMessage.style.display = 'flex';
+        // Sistema de senha
+        const SENHA_CORRETA = "123456";
+        let autenticado = localStorage.getItem('autenticado') === 'true';
+        let respostas = [];
+        let ultimaAtualizacao = 0;
+        
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarRespostas();
+            atualizarBotaoFlutuante();
+        });
+        
+        // Funções do questionário
+        function avancarEtapa(etapaAtual, resposta) {
+            respostas[etapaAtual - 1] = resposta;
             
-            // Oculta a mensagem depois de 3 segundos
-            setTimeout(() => {
-                kissMessage.style.display = 'none';
-            }, 3000); 
+            document.getElementById(`etapa${etapaAtual}`).classList.remove('ativa');
+            document.getElementById(`ponto${etapaAtual}`).classList.remove('ativo');
+            
+            if (etapaAtual === 1) {
+                document.getElementById('etapa2').classList.add('ativa');
+                document.getElementById('ponto2').classList.add('ativo');
+            } else if (etapaAtual === 2) {
+                document.getElementById('resultado').classList.add('ativa');
+                document.getElementById('ponto3').classList.add('ativo');
+                
+                salvarResposta();
+                
+                let resultadoTexto = '';
+                let respostaFinal = '';
+                
+                if (respostas[0] === true && respostas[1] === true) {
+                    resultadoTexto = 'Decisão Confirmada!';
+                    respostaFinal = '✅ Sim para ambas as perguntas';
+                } else if (respostas[0] === true && respostas[1] === false) {
+                    resultadoTexto = 'Hesitação Detectada';
+                    respostaFinal = '✅ Sim → ❌ Não';
+                } else if (respostas[0] === false && respostas[1] === true) {
+                    resultadoTexto = 'Mudança de Ideia';
+                    respostaFinal = '❌ Não → ✅ Sim';
+                } else {
+                    resultadoTexto = 'Decisão Negativa';
+                    respostaFinal = '❌ Não para ambas as perguntas';
+                }
+                
+                document.getElementById('texto-resultado').textContent = resultadoTexto;
+                document.getElementById('resposta-final').textContent = respostaFinal;
+            }
         }
+        
+        function reiniciar() {
+            respostas = [];
+            document.getElementById('resultado').classList.remove('ativa');
+            document.getElementById('ponto1').classList.add('ativo');
+            document.getElementById('ponto2').classList.remove('ativo');
+            document.getElementById('ponto3').classList.remove('ativo');
+            document.getElementById('etapa1').classList.add('ativa');
+        }
+        
+        // Sistema de compartilhamento
+        function salvarResposta() {
+            const respostaCompleta = {
+                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                respostas: [...respostas],
+                data: new Date().toISOString(),
+                dispositivo: getDispositivoInfo()
+            };
+            
+            let todasRespostas = JSON.parse(localStorage.getItem('respostasCompartilhadas')) || [];
+            todasRespostas.push(respostaCompleta);
+            localStorage.setItem('respostasCompartilhadas', JSON.stringify(todasRespostas));
+            
+            localStorage.setItem('ultimaResposta', Date.now().toString());
+            atualizarBotaoFlutuante();
+        }
+        
+        function getDispositivoInfo() {
+            const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            return mobile ? '📱 Mobile' : '💻 Desktop';
+        }
+        
+        function carregarRespostas() {
+            return JSON.parse(localStorage.getItem('respostasCompartilhadas')) || [];
+        }
+        
+        // Funções do modal e senha
+        function abrirModal() {
+            document.getElementById('modal-respostas').style.display = 'flex';
+            document.getElementById('input-senha').focus();
+            
+            if (autenticado) {
+                mostrarRespostas();
+            } else {
+                mostrarAreaSenha();
+            }
+        }
+        
+        function fecharModal() {
+            document.getElementById('modal-respostas').style.display = 'none';
+            document.getElementById('input-senha').value = '';
+            document.getElementById('mensagem-erro').style.display = 'none';
+        }
+        
+        function verificarSenha() {
+            const senhaDigitada = document.getElementById('input-senha').value;
+            const mensagemErro = document.getElementById('mensagem-erro');
+            
+            if (senhaDigitada === SENHA_CORRETA) {
+                autenticado = true;
+                localStorage.setItem('autenticado', 'true');
+                mostrarRespostas();
+                mensagemErro.style.display = 'none';
+                atualizarBotaoFlutuante();
+            } else {
+                mensagemErro.style.display = 'block';
+                document.getElementById('input-senha').value = '';
+                document.getElementById('input-senha').focus();
+                
+                // Efeito de shake
+                const input = document.getElementById('input-senha');
+                input.style.animation = 'none';
+                setTimeout(() => {
+                    input.style.animation = 'shake 0.5s';
+                }, 10);
+            }
+        }
+        
+        function verificarEnter(event) {
+            if (event.key === 'Enter') {
+                verificarSenha();
+            }
+        }
+        
+        function mostrarAreaSenha() {
+            document.getElementById('area-senha').style.display = 'flex';
+            document.getElementById('lista-respostas').style.display = 'none';
+        }
+        
+        function mostrarRespostas() {
+            document.getElementById('area-senha').style.display = 'none';
+            document.getElementById('lista-respostas').style.display = 'block';
+            atualizarListaRespostas();
+        }
+        
+        function atualizarBotaoFlutuante() {
+            const btn = document.getElementById('btn-flutuante');
+            const respostas = carregarRespostas();
+            
+            if (autenticado) {
+                btn.classList.add('ativo');
+                btn.innerHTML = '📊';
+            } else {
+                btn.classList.remove('ativo');
+                btn.innerHTML = '🔒';
+            }
+            
+            // Mostrar badge com número de respostas
+            if (respostas.length > 0) {
+                btn.setAttribute('data-count', respostas.length);
+            }
+        }
+        
+        function atualizarListaRespostas() {
+            if (!autenticado) return;
+            
+            const respostas = carregarRespostas();
+            const lista = document.getElementById('lista-respostas');
+            const contador = document.getElementById('contador-respostas');
+            
+            contador.textContent = respostas.length;
+            
+            if (respostas.length === 0) {
+                lista.innerHTML = '<div class="sem-respostas">Nenhuma resposta ainda</div>';
+                return;
+            }
+            
+            respostas.sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            lista.innerHTML = '';
+            
+            respostas.forEach((resposta, index) => {
+                const item = document.createElement('div');
+                item.className = 'resposta-item';
+                
+                const data = new Date(resposta.data).toLocaleString();
+                const tempoPassado = calcularTempoPassado(resposta.data);
+                
+                const resultado = resposta.respostas[0] && resposta.respostas[1] ? '✅ Confirmado' :
+                                !resposta.respostas[0] && !resposta.respostas[1] ? '❌ Recusado' :
+                                '⚠️ Indeciso';
+                
+                const etapasHTML = resposta.respostas.map((r, i) => `
+                    <div class="etapa-resposta ${r ? 'etapa-sim' : 'etapa-nao'}">
+                        ${i === 0 ? 'Começar?' : 'Certeza?'}: ${r ? 'Sim' : 'Não'}
+                    </div>
+                `).join('');
+                
+                item.innerHTML = `
+                    <div class="resposta-info">
+                        <span>${resposta.dispositivo}</span>
+                        <span>${tempoPassado}</span>
+                    </div>
+                    <div class="resposta-conteudo">
+                        <strong>${resultado}</strong>
+                        ${index === 0 ? '<span class="novo-badge">NOVO</span>' : ''}
+                    </div>
+                    <div class="resposta-etapas">
+                        ${etapasHTML}
+                    </div>
+                    <div class="resposta-info">
+                        <span>${data}</span>
+                    </div>
+                `;
+                
+                lista.appendChild(item);
+            });
+        }
+        
+        function calcularTempoPassado(dataString) {
+            const agora = new Date();
+            const data = new Date(dataString);
+            const diffMs = agora - data;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            
+            if (diffMins < 1) return 'Agora mesmo';
+            if (diffMins < 60) return `Há ${diffMins} min`;
+            if (diffHours < 24) return `Há ${diffHours} h`;
+            return `Há ${Math.floor(diffHours / 24)} dias`;
+        }
+        
+        // Verificar novas respostas periodicamente
+        setInterval(() => {
+            if (autenticado) {
+                const ultimaResposta = localStorage.getItem('ultimaResposta');
+                if (ultimaResposta && parseInt(ultimaResposta) > ultimaAtualizacao) {
+                    ultimaAtualizacao = parseInt(ultimaResposta);
+                    atualizarListaRespostas();
+                    atualizarBotaoFlutuante();
+                }
+            }
+        }, 3000);
+        
+        // CSS para animação de shake
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-5px); }
+                75% { transform: translateX(5px); }
+            }
+            
+            .btn-flutuante[data-count]::after {
+                content: attr(data-count);
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                background: #ff4444;
+                color: white;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
