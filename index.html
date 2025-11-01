@@ -3,843 +3,733 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmação Multi-Dispositivo</title>
+    <title>Para Minha Princesa Maria</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --cor-fundo: #0a0a0a;
-            --cor-card: #1a1a1a;
-            --cor-texto: #ffffff;
-            --cor-texto-secundario: #888;
-            --cor-borda: #333;
-            --cor-botao-sim: #00ff88;
-            --cor-botao-nao: #ff4444;
-            --cor-destaque: #6200ea;
-            --cor-erro: #ff4444;
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background-color: var(--cor-fundo);
-            color: var(--cor-texto);
+            background: #000;
+            color: #fff;
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
-            padding-bottom: 80px;
+            position: relative;
+            overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+        
+        body.darkened {
+            background-color: #0a0a0a;
         }
         
         .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        /* Header */
-        .header {
+            max-width: 1000px;
+            width: 100%;
+            background: linear-gradient(135deg, #111, #222);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.2);
+            padding: 40px;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--cor-borda);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+            transition: filter 0.5s ease;
         }
         
-        .titulo {
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 10px;
+        body.darkened .container {
+            filter: brightness(0.7);
         }
         
-        .subtitulo {
-            color: var(--cor-texto-secundario);
-            font-size: 1rem;
+        .hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
         }
         
-        /* Card de Perguntas */
-        .card {
-            background-color: var(--cor-card);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--cor-borda);
+        .heart {
+            position: absolute;
+            color: #ff1493;
+            font-size: 20px;
+            opacity: 0.7;
+            animation: float 5s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        h1 {
+            color: #ff1493;
+            font-size: 2.8rem;
             margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
         }
         
-        .etapa {
-            display: none;
-            animation: fadeIn 0.5s ease;
+        h2 {
+            color: #ff69b4;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
         }
         
-        .etapa.ativa {
-            display: block;
-        }
-        
-        .numero-etapa {
-            color: var(--cor-texto-secundario);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-            text-align: center;
-        }
-        
-        .pergunta {
-            font-size: 1.4rem;
+        .greeting {
+            font-size: 1.8rem;
+            color: #ff69b4;
             margin-bottom: 30px;
-            font-weight: 300;
-            line-height: 1.4;
-            text-align: center;
+            position: relative;
+            z-index: 1;
         }
         
-        .botoes {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 20px;
+        .section {
+            background-color: rgba(40, 40, 40, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            border-left: 5px solid #ff1493;
+            text-align: left;
         }
         
-        .btn {
-            padding: 15px 25px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex: 1;
-            max-width: 140px;
+        .section-right {
+            border-left: none;
+            border-right: 5px solid #ff1493;
         }
         
-        .btn-sim {
-            background-color: var(--cor-botao-sim);
-            color: #000;
-        }
-        
-        .btn-nao {
-            background-color: var(--cor-botao-nao);
-            color: #fff;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        
-        .progresso {
-            display: flex;
-            justify-content: center;
-            margin-top: 30px;
-            gap: 8px;
-        }
-        
-        .ponto {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--cor-borda);
-            transition: background-color 0.3s ease;
-        }
-        
-        .ponto.ativo {
-            background-color: var(--cor-texto);
-        }
-        
-        .resultado {
+        .section p {
             font-size: 1.2rem;
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.05);
-            text-align: center;
+            line-height: 1.6;
+            color: #ddd;
+            margin-bottom: 15px;
         }
         
-        /* Botão Flutuante */
-        .btn-flutuante {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--cor-destaque), #7c3aed);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(106, 17, 203, 0.4);
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .message {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #eee;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+            background-color: rgba(30, 30, 30, 0.7);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
+        }
+        
+        .qualities {
+            background-color: rgba(50, 50, 50, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            border-left: 5px solid #ff1493;
+        }
+        
+        .qualities ul {
+            list-style-type: none;
+            text-align: left;
+        }
+        
+        .qualities li {
+            padding: 12px 0;
+            font-size: 1.2rem;
+            color: #ddd;
+            position: relative;
+            padding-left: 40px;
             transition: all 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         
-        .btn-flutuante:hover {
+        .qualities li:hover {
+            color: #fff;
+            transform: translateX(5px);
+        }
+        
+        .qualities li:before {
+            content: "❤️";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #ff69b4;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        
+        .nickname-changer {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(40, 40, 40, 0.7);
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        .change-btn {
+            background: #ff1493;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .change-btn:hover {
+            background: #ff69b4;
+            transform: scale(1.05);
+        }
+        
+        .highlight {
+            color: #ff69b4;
+            font-weight: bold;
+        }
+        
+        .special-btn {
+            background: linear-gradient(45deg, #ff1493, #8a2be2);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .special-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(106, 17, 203, 0.6);
+            box-shadow: 0 12px 30px rgba(255, 20, 147, 0.6);
         }
         
-        .btn-flutuante.ativo {
-            background: linear-gradient(135deg, var(--cor-botao-sim), #00cc6a);
+        .second-btn {
+            background: linear-gradient(45deg, #8a2be2, #ff1493);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 20px 0;
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+            position: relative;
+            z-index: 10;
         }
         
-        /* Modal de Respostas */
-        .modal {
-            display: none;
+        .second-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.6);
+        }
+        
+        /* Efeitos especiais */
+        .special-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .modal-content {
-            background-color: var(--cor-card);
-            border-radius: 16px;
-            padding: 25px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 80vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            border: 1px solid var(--cor-borda);
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--cor-borda);
-        }
-        
-        .modal-titulo {
-            font-size: 1.4rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .contador {
-            background-color: var(--cor-destaque);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-        }
-        
-        .fechar {
-            color: var(--cor-texto-secundario);
-            font-size: 1.8rem;
-            cursor: pointer;
-            transition: color 0.2s;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .fechar:hover {
-            color: var(--cor-texto);
-        }
-        
-        /* Área de Senha */
-        .area-senha {
-            text-align: center;
-            padding: 30px 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        
-        .senha-input {
-            width: 100%;
-            padding: 16px;
-            background-color: #2a2a2a;
-            border: 1px solid var(--cor-borda);
-            border-radius: 12px;
-            color: var(--cor-texto);
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .senha-input:focus {
-            outline: none;
-            border-color: var(--cor-destaque);
-            box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
-        }
-        
-        .mensagem-erro {
-            color: var(--cor-erro);
-            margin: 15px 0;
-            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 999;
             display: none;
         }
         
-        /* Lista de Respostas */
-        .lista-respostas {
-            flex: 1;
-            overflow-y: auto;
+        .special-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
             display: none;
         }
         
-        .resposta-item {
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--cor-destaque);
-            animation: slideIn 0.3s ease;
+        .special-heart {
+            position: absolute;
+            font-size: 40px;
+            opacity: 0;
+            animation: fall 6s linear forwards;
+            text-shadow: 0 0 15px currentColor;
         }
         
-        .resposta-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--cor-texto-secundario);
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) scale(0.8);
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
         }
         
-        .resposta-conteudo {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .resposta-etapas {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .etapa-resposta {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-        }
-        
-        .etapa-sim {
-            background-color: rgba(0, 255, 136, 0.2);
-            border: 1px solid var(--cor-botao-sim);
-        }
-        
-        .etapa-nao {
-            background-color: rgba(255, 68, 68, 0.2);
-            border: 1px solid var(--cor-botao-nao);
-        }
-        
-        .sem-respostas {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--cor-texto-secundario);
-            font-style: italic;
-        }
-        
-        .novo-badge {
-            background-color: var(--cor-botao-sim);
-            color: #000;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7rem;
+        .love-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 4rem;
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 30px rgba(255, 20, 147, 0.6);
+            z-index: 1001;
+            opacity: 0;
             font-weight: bold;
-            margin-left: 5px;
-            animation: blink 1s infinite;
-        }
-        
-        .status-sincronizacao {
             text-align: center;
-            padding: 10px;
-            font-size: 0.8rem;
-            color: var(--cor-texto-secundario);
+            line-height: 1.3;
+            display: none;
         }
         
-        .status-online {
-            color: var(--cor-botao-sim);
+        .love-message.active {
+            display: block;
+            animation: popIn 4s ease-out forwards;
         }
         
-        /* Animações */
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+        @keyframes popIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
         }
         
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-10px); }
-            to { opacity: 1; transform: translateX(0); }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .god-message {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(255, 20, 147, 0.8));
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
+            text-align: center;
+            font-size: 1.4rem;
+            line-height: 1.7;
+            display: none;
+            border: 2px solid #ff69b4;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .god-message.active {
+            display: block;
+            animation: fadeIn 1.5s ease-out;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Responsivo */
-        @media (max-width: 480px) {
-            .card {
-                padding: 20px 15px;
+        .god-message .highlight {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            font-size: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .love-message {
+                font-size: 2.5rem;
             }
             
-            .pergunta {
-                font-size: 1.3rem;
+            .special-heart {
+                font-size: 30px;
             }
             
-            .btn {
-                padding: 14px 20px;
+            .god-message {
+                font-size: 1.2rem;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .greeting {
+                font-size: 1.5rem;
+            }
+            
+            .section p, .qualities li {
                 font-size: 1rem;
             }
             
-            .modal-content {
-                padding: 20px 15px;
+            .message {
+                font-size: 1.1rem;
             }
             
-            .btn-flutuante {
-                width: 55px;
-                height: 55px;
-                bottom: 15px;
-                right: 15px;
+            .love-message {
+                font-size: 2rem;
+            }
+            
+            .special-btn {
+                padding: 15px 30px;
+                font-size: 1.3rem;
+            }
+            
+            .second-btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+    
     <div class="container">
-        <div class="header">
-            <h1 class="titulo">Sistema de Confirmação</h1>
-            <p class="subtitulo">Responda às perguntas abaixo</p>
+        <div class="hearts" id="hearts"></div>
+        
+        <h1>Para Minha Princesa Maria</h1>
+        
+        <div class="greeting">
+            <p>Olá, <span id="nickname">Minha Princesa</span>!</p>
         </div>
         
-        <div class="card">
-            <!-- Etapa 1 -->
-            <div class="etapa ativa" id="etapa1">
-                <div class="numero-etapa">PERGUNTA 1 DE 2</div>
-                <div class="pergunta">Vamos começar?</div>
-                <div class="botoes">
-                    <button class="btn btn-sim" onclick="avancarEtapa(1, true)">Sim</button>
-                    <button class="btn btn-nao" onclick="avancarEtapa(1, false)">Não</button>
-                </div>
-            </div>
-            
-            <!-- Etapa 2 -->
-            <div class="etapa" id="etapa2">
-                <div class="numero-etapa">PERGUNTA 2 DE 2</div>
-                <div class="pergunta">Tem certeza??</div>
-                <div class="botoes">
-                    <button class="btn btn-sim" onclick="avancarEtapa(2, true)">Sim</button>
-                    <button class="btn btn-nao" onclick="avancarEtapa(2, false)">Não</button>
-                </div>
-            </div>
-            
-            <!-- Resultado -->
-            <div class="etapa" id="resultado">
-                <div class="pergunta" id="texto-resultado">Resultado</div>
-                <div class="resultado" id="resposta-final">
-                    Aguardando resposta...
-                </div>
-                <div class="botoes">
-                    <button class="btn btn-sim" onclick="reiniciar()">Fazer Novamente</button>
-                </div>
-            </div>
-            
-            <div class="progresso">
-                <div class="ponto ativo" id="ponto1"></div>
-                <div class="ponto" id="ponto2"></div>
-                <div class="ponto" id="ponto3"></div>
-            </div>
+        <div class="nickname-changer">
+            <p>Como posso te chamar hoje?</p>
+            <button class="change-btn" onclick="changeNickname()">Mudar Apelido</button>
         </div>
         
-        <div class="status-sincronizacao">
-            <span class="status-online">●</span> <span id="status-texto">Conectado</span>
+        <div class="section">
+            <h2>Desde que te conheci...</h2>
+            <p>Desde o primeiro momento em que nossos olhares se cruzaram, algo dentro de mim mudou para sempre. Eu ainda não sabia, mas já estava completamente apaixonado por você.</p>
+            <p>Cada conversa, cada risada compartilhada, cada momento ao seu lado só confirmava o que meu coração já sabia: <span class="highlight">você era a pessoa que eu sempre procurei</span>.</p>
+            <p>Seu sorriso ilumina meus dias, sua voz acalma minha alma, e seu amor preenche cada espaço vazio dentro de mim. Desde que te conheci, minha vida ganhou cores que nem sabia que existiam.</p>
+        </div>
+        
+        <div class="section section-right">
+            <h2>O que sinto por você</h2>
+            <p>Meu amor por você é como um rio que nunca para de correr. Começou como um pequeno filete e hoje é uma correnteza forte que carrega meus sonhos, meus desejos e minha felicidade.</p>
+            <p><span class="highlight">Você é o meu lugar favorito no mundo inteiro</span>. Não importa onde estejamos, se estou ao seu lado, estou em casa. Seu abraço é o meu refúgio, seu colo é o meu conforto, seu amor é a minha paz.</p>
+            <p>Amo a maneira como você ri, como seus olhos brilham quando está feliz, como você me olha quando acho que ninguém está prestando atenção.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Nossos momentos</h2>
+            <p>Guardo cada momento nosso como um tesouro precioso. Desde as conversas mais simples até os abraços mais apertados, tudo com você se torna especial.</p>
+            <p>Adormecer pensando em você e acordar com seu nome na mente se tornou a minha rotina favorita. <span class="highlight">Sonhar com você é o meu passatempo preferido</span>, mas estar ao seu lado é a minha realidade mais amada.</p>
+            <p>Cada "bom dia" seu é como um raio de sol entrando pela janela da minha alma, iluminando todo o meu ser.</p>
+        </div>
+        
+        <div class="section section-right">
+            <h2>O que você significa para mim</h2>
+            <p>Você é a melodia da minha música favorita, a estrofe mais bonita do meu poema, a cena mais emocionante do meu filme.</p>
+            <p><span class="highlight">Você transformou minha vida em algo extraordinário</span>. Antes de você, eu apenas existia. Depois de você, eu comecei a viver de verdade.</p>
+            <p>Se eu pudesse escolher novamente entre todas as pessoas do mundo, eu escolheria você milhões de vezes. Em cada vida, em cada universo, em cada possibilidade.</p>
+        </div>
+        
+        <div class="message">
+            <p>Você é uma mulher incrível e eu sou o <span class="highlight">HOMEM mais sortudo desse mundo</span> por poder falar que tenho você ao meu lado.</p>
+            <p>Você é uma mulher muitooo querida e que eu <span class="highlight">nunca quero te perder</span>. Cada dia ao seu lado é um presente que eu guardo com todo cuidado no meu coração.</p>
+            <p>Obrigado por ser exatamente quem você é, e por me permitir fazer parte da sua vida. Prometo honrar esse privilégio todos os dias.</p>
+        </div>
+        
+        <div class="qualities">
+            <h2>Meu amor, você é:</h2>
+            <ul>
+                <li>Linda</li>
+                <li>Maravilhosa</li>
+                <li>Cheirosa</li>
+                <li>Gentil</li>
+                <li>Uma pessoa de caráter</li>
+                <li>Uma pessoa honesta</li>
+                <li>Uma pessoa que sempre posso contar</li>
+                <li>Inteligente e perspicaz</li>
+                <li>Companheira em todos os momentos</li>
+                <li>Meu porto seguro</li>
+                <li>Minha melhor amiga</li>
+                <li>A razão do meu sorriso</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Meu compromisso com você</h2>
+            <p>Prometo sempre te amar, respeitar e cuidar de você. Prometo ser seu porto seguro, seu ombro amigo, seu companheiro de todas as horas.</p>
+            <p><span class="highlight">Prometo fazer você se sentir amada todos os dias</span>, mesmo nos dias difíceis. Prometo lembrar você de como é incrível, mesmo quando você duvidar.</p>
+            <p>E acima de tudo, prometo que meu amor por você só vai crescer a cada dia que passar, porque você é a melhor coisa que já aconteceu na minha vida.</p>
+        </div>
+        
+        <button class="special-btn" onclick="showSpecialEffect()">Clique aqui</button>
+        
+        <button class="second-btn" onclick="showGodMessage()">Clica aqui kk</button>
+        
+        <div class="god-message" id="godMessage">
+            <p><span class="highlight">Então aqui eu quis falar um pouco dos meus sentimentos.</span></p>
+            <p>Eu penso que eu cada vez estou me apaixonando mais por você só tenho a te agradecer póis você está cada dia mais me fazendo eu me aproximar de Deus.</p>
+        </div>
+        
+        <div class="footer">
+            <p>Com todo meu amor, para sempre</p>
+            <p>Seu grande amor ❤️</p>
         </div>
     </div>
 
-    <!-- Botão Flutuante -->
-    <button class="btn-flutuante" id="btn-flutuante" onclick="abrirModal()">🔒</button>
-
-    <!-- Modal de Respostas -->
-    <div class="modal" id="modal-respostas">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-titulo">
-                    Respostas Protegidas
-                    <span class="contador" id="contador-respostas">0</span>
-                </h2>
-                <span class="fechar" onclick="fecharModal()">&times;</span>
-            </div>
-            
-            <!-- Área de Senha -->
-            <div class="area-senha" id="area-senha">
-                <h3 style="margin-bottom: 25px; color: var(--cor-texto-secundario); font-size: 1.1rem;">🔒 Acesso Restrito</h3>
-                <input type="password" class="senha-input" id="input-senha" placeholder="Digite a senha" onkeypress="verificarEnter(event)">
-                <button class="btn btn-sim" onclick="verificarSenha()" style="max-width: 200px; margin: 0 auto;">Acessar</button>
-                <div class="mensagem-erro" id="mensagem-erro">Senha incorreta!</div>
-            </div>
-            
-            <!-- Lista de Respostas -->
-            <div class="lista-respostas" id="lista-respostas">
-                <div class="sem-respostas">Carregando respostas...</div>
-            </div>
-        </div>
-    </div>
+    <!-- Elementos para o efeito especial -->
+    <div class="special-overlay" id="specialOverlay"></div>
+    <div class="special-hearts" id="specialHearts"></div>
+    <div class="love-message" id="loveMessage">Só saiba que Eu Te Amo❤️</div>
 
     <script>
-        // Sistema de sincronização REAL
-        const SENHA_CORRETA = "123456";
-        const CHAVE_RESPOSTAS = "sistemaConfirmacaoRespostas";
-        const CHAVE_ULTIMA_ATUALIZACAO = "sistemaConfirmacaoUltimaAtt";
+        // Criar corações flutuantes
+        const heartsContainer = document.getElementById('hearts');
+        const starsContainer = document.getElementById('stars');
+        const nicknames = ["Minha princesa", "Meu Bem", "Minha neném", "Minha vida", "Meu amor", "Minha rainha", "Meu tudo"];
+        let currentNicknameIndex = 0;
+        const nicknameElement = document.getElementById('nickname');
         
-        let autenticado = localStorage.getItem('autenticado') === 'true';
-        let respostasAtuais = [];
-        let intervaloVerificacao;
+        // Elementos do efeito especial
+        const specialOverlay = document.getElementById('specialOverlay');
+        const specialHearts = document.getElementById('specialHearts');
+        const loveMessage = document.getElementById('loveMessage');
+        const godMessage = document.getElementById('godMessage');
         
-        // Inicializar sistema
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log("🚀 Sistema iniciado");
-            inicializarSistema();
-            iniciarVerificacaoContinua();
+        // Criar corações
+        for (let i = 0; i < 25; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heartsContainer.appendChild(heart);
+        }
+        
+        // Criar estrelas
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (Math.random() * 3 + 1) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Alternar entre os apelidos
+        function changeNickname() {
+            currentNicknameIndex = (currentNicknameIndex + 1) % nicknames.length;
+            nicknameElement.textContent = nicknames[currentNicknameIndex];
+            
+            // Efeito de fade
+            nicknameElement.style.opacity = 0;
+            setTimeout(() => {
+                nicknameElement.style.opacity = 1;
+            }, 300);
+        }
+        
+        // Mudar apelido automaticamente a cada 5 segundos
+        setInterval(changeNickname, 5000);
+        
+        // Adicionar efeito de clique para criar mais corações
+        document.addEventListener('click', function(e) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animation = 'float 3s ease-in-out forwards';
+            document.body.appendChild(heart);
+            
+            // Remover coração após animação
+            setTimeout(() => {
+                heart.remove();
+            }, 3000);
         });
         
-        function inicializarSistema() {
-            // Carregar respostas existentes
-            respostasAtuais = carregarRespostas();
-            console.log(`📊 ${respostasAtuais.length} respostas carregadas`);
+        // Efeito especial do botão
+        function showSpecialEffect() {
+            // Escurecer o fundo
+            document.body.classList.add('darkened');
             
-            // Atualizar interface
-            atualizarBotaoFlutuante();
-            atualizarStatusSincronizacao();
+            // Mostrar overlay
+            specialOverlay.style.display = 'block';
             
-            // Se já estiver autenticado, mostrar respostas
-            if (autenticado && document.getElementById('modal-respostas').style.display === 'flex') {
-                mostrarRespostas();
-            }
-        }
-        
-        function iniciarVerificacaoContinua() {
-            // Verificar a cada 1 segundo
-            intervaloVerificacao = setInterval(verificarAtualizacoes, 1000);
+            // Mostrar corações especiais
+            specialHearts.style.display = 'block';
             
-            // Verificar quando a página fica visível
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    verificarAtualizacoes();
-                }
-            });
-        }
-        
-        function verificarAtualizacoes() {
-            const ultimaAttRemota = localStorage.getItem(CHAVE_ULTIMA_ATUALIZACAO);
-            const ultimaAttLocal = localStorage.getItem('ultimaAttLocal') || '0';
-            
-            if (ultimaAttRemota && parseInt(ultimaAttRemota) > parseInt(ultimaAttLocal)) {
-                console.log("🔄 Nova atualização detectada!");
-                respostasAtuais = carregarRespostas();
-                atualizarInterfaceRespostas();
-                atualizarBotaoFlutuante();
-                localStorage.setItem('ultimaAttLocal', ultimaAttRemota);
-                atualizarStatusSincronizacao();
-            }
-        }
-        
-        function atualizarStatusSincronizacao() {
-            const statusElement = document.getElementById('status-texto');
-            const totalRespostas = respostasAtuais.length;
-            statusElement.textContent = `Sincronizado • ${totalRespostas} resposta${totalRespostas !== 1 ? 's' : ''}`;
-        }
-        
-        // Funções do questionário
-        function avancarEtapa(etapaAtual, resposta) {
-            const etapas = [1, 2];
-            const respostasUsuario = JSON.parse(localStorage.getItem('respostasUsuario')) || [];
-            
-            // Salvar resposta atual
-            respostasUsuario[etapaAtual - 1] = resposta;
-            localStorage.setItem('respostasUsuario', JSON.stringify(respostasUsuario));
-            
-            // Atualizar interface
-            document.getElementById(`etapa${etapaAtual}`).classList.remove('ativa');
-            document.getElementById(`ponto${etapaAtual}`).classList.remove('ativo');
-            
-            if (etapaAtual === 1) {
-                document.getElementById('etapa2').classList.add('ativa');
-                document.getElementById('ponto2').classList.add('ativo');
-            } else if (etapaAtual === 2) {
-                document.getElementById('resultado').classList.add('ativa');
-                document.getElementById('ponto3').classList.add('ativo');
+            // Criar corações vermelhos escuros e roxos
+            for (let i = 0; i < 80; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('special-heart');
+                heart.innerHTML = '❤';
                 
-                // Salvar resposta completa
-                salvarRespostaCompleta(respostasUsuario);
-                
-                // Mostrar resultado
-                mostrarResultado(respostasUsuario);
-            }
-        }
-        
-        function salvarRespostaCompleta(respostas) {
-            const respostaCompleta = {
-                id: Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-                respostas: [...respostas],
-                data: new Date().toISOString(),
-                dispositivo: getDispositivoInfo(),
-                timestamp: Date.now()
-            };
-            
-            console.log("💾 Salvando resposta:", respostaCompleta);
-            
-            // Adicionar à lista de respostas
-            respostasAtuais.unshift(respostaCompleta); // Adicionar no início
-            
-            // Manter apenas as últimas 100 respostas
-            if (respostasAtuais.length > 100) {
-                respostasAtuais = respostasAtuais.slice(0, 100);
-            }
-            
-            // Salvar no localStorage
-            localStorage.setItem(CHAVE_RESPOSTAS, JSON.stringify(respostasAtuais));
-            localStorage.setItem(CHAVE_ULTIMA_ATUALIZACAO, Date.now().toString());
-            
-            console.log("✅ Resposta salva. Total:", respostasAtuais.length);
-            
-            // Atualizar interface
-            atualizarBotaoFlutuante();
-            atualizarStatusSincronizacao();
-            
-            // Limpar respostas do usuário
-            localStorage.removeItem('respostasUsuario');
-        }
-        
-        function mostrarResultado(respostas) {
-            let resultadoTexto = '';
-            let respostaFinal = '';
-            
-            if (respostas[0] === true && respostas[1] === true) {
-                resultadoTexto = 'Decisão Confirmada!';
-                respostaFinal = '✅ Sim para ambas as perguntas';
-            } else if (respostas[0] === true && respostas[1] === false) {
-                resultadoTexto = 'Hesitação Detectada';
-                respostaFinal = '✅ Sim → ❌ Não';
-            } else if (respostas[0] === false && respostas[1] === true) {
-                resultadoTexto = 'Mudança de Ideia';
-                respostaFinal = '❌ Não → ✅ Sim';
-            } else {
-                resultadoTexto = 'Decisão Negativa';
-                respostaFinal = '❌ Não para ambas as perguntas';
-            }
-            
-            document.getElementById('texto-resultado').textContent = resultadoTexto;
-            document.getElementById('resposta-final').textContent = respostaFinal;
-        }
-        
-        function reiniciar() {
-            localStorage.removeItem('respostasUsuario');
-            document.getElementById('resultado').classList.remove('ativa');
-            document.getElementById('ponto1').classList.add('ativo');
-            document.getElementById('ponto2').classList.remove('ativo');
-            document.getElementById('ponto3').classList.remove('ativo');
-            document.getElementById('etapa1').classList.add('ativa');
-        }
-        
-        // Sistema de armazenamento
-        function carregarRespostas() {
-            try {
-                const respostasSalvas = localStorage.getItem(CHAVE_RESPOSTAS);
-                if (respostasSalvas) {
-                    return JSON.parse(respostasSalvas);
-                }
-            } catch (e) {
-                console.error("❌ Erro ao carregar respostas:", e);
-            }
-            return [];
-        }
-        
-        function getDispositivoInfo() {
-            const mobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            return mobile ? '📱 Mobile' : '💻 Desktop';
-        }
-        
-        // Funções do modal e senha
-        function abrirModal() {
-            document.getElementById('modal-respostas').style.display = 'flex';
-            document.getElementById('input-senha').focus();
-            
-            if (autenticado) {
-                mostrarRespostas();
-            } else {
-                mostrarAreaSenha();
-            }
-        }
-        
-        function fecharModal() {
-            document.getElementById('modal-respostas').style.display = 'none';
-            document.getElementById('input-senha').value = '';
-            document.getElementById('mensagem-erro').style.display = 'none';
-        }
-        
-        function verificarSenha() {
-            const senhaDigitada = document.getElementById('input-senha').value;
-            const mensagemErro = document.getElementById('mensagem-erro');
-            
-            if (senhaDigitada === SENHA_CORRETA) {
-                autenticado = true;
-                localStorage.setItem('autenticado', 'true');
-                mostrarRespostas();
-                mensagemErro.style.display = 'none';
-                atualizarBotaoFlutuante();
-            } else {
-                mensagemErro.style.display = 'block';
-                document.getElementById('input-senha').value = '';
-                document.getElementById('input-senha').focus();
-                
-                // Efeito de shake
-                const input = document.getElementById('input-senha');
-                input.style.animation = 'none';
-                setTimeout(() => {
-                    input.style.animation = 'shake 0.5s';
-                }, 10);
-            }
-        }
-        
-        function verificarEnter(event) {
-            if (event.key === 'Enter') {
-                verificarSenha();
-            }
-        }
-        
-        function mostrarAreaSenha() {
-            document.getElementById('area-senha').style.display = 'flex';
-            document.getElementById('lista-respostas').style.display = 'none';
-        }
-        
-        function mostrarRespostas() {
-            document.getElementById('area-senha').style.display = 'none';
-            document.getElementById('lista-respostas').style.display = 'block';
-            atualizarInterfaceRespostas();
-        }
-        
-        function atualizarBotaoFlutuante() {
-            const btn = document.getElementById('btn-flutuante');
-            const totalRespostas = respostasAtuais.length;
-            
-            if (autenticado) {
-                btn.classList.add('ativo');
-                btn.innerHTML = '📊';
-                btn.setAttribute('data-count', totalRespostas);
-            } else {
-                btn.classList.remove('ativo');
-                btn.innerHTML = '🔒';
-                if (totalRespostas > 0) {
-                    btn.setAttribute('data-count', totalRespostas);
+                // Cores alternadas entre vermelho escuro e roxo
+                if (i % 2 === 0) {
+                    heart.style.color = '#8B0000'; // Vermelho escuro
                 } else {
-                    btn.removeAttribute('data-count');
+                    heart.style.color = '#8A2BE2'; // Roxo
+                }
+                
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (Math.random() * 40 + 30) + 'px';
+                heart.style.animationDuration = (Math.random() * 4 + 5) + 's';
+                heart.style.animationDelay = (Math.random() * 3) + 's';
+                
+                specialHearts.appendChild(heart);
+            }
+            
+            // Mostrar mensagem de amor
+            loveMessage.classList.add('active');
+            
+            // Adicionar efeito de pulsação
+            loveMessage.classList.add('pulse');
+            
+            // Remover elementos após a animação
+            setTimeout(() => {
+                document.body.classList.remove('darkened');
+                specialOverlay.style.display = 'none';
+                specialHearts.style.display = 'none';
+                loveMessage.classList.remove('active', 'pulse');
+                
+                // Limpar corações
+                specialHearts.innerHTML = '';
+            }, 6000);
+        }
+        
+        // Mostrar mensagem sobre Deus
+        function showGodMessage() {
+            godMessage.classList.add('active');
+            
+            // Rolar suavemente até a mensagem
+            godMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Adicionar alguns corações especiais
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.color = '#8A2BE2';
+                document.body.appendChild(heart);
+                
+                // Remover coração após animação
+                setTimeout(() => {
+                    heart.remove();
+                }, 5000);
+            }
+        }
+        
+        // Efeito de digitação para algumas seções
+        function typeWriter(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
                 }
             }
+            
+            typing();
         }
         
-        function atualizarInterfaceRespostas() {
-            if (!autenticado) return;
-            
-            const lista = document.getElementById('lista-respostas');
-            const contador = document.getElementById('contador-respostas');
-            
-            contador.textContent = respostasAtuais.length;
-            
-            if (respostasAtuais.length === 0) {
-                lista.innerHTML = '<div class="sem-respostas">Nenhuma resposta ainda</div>';
-                return;
-            }
-            
-            let html = '';
-            
-            respostasAtuais.forEach((resposta, index) => {
-                const data = new Date(resposta.data).toLocaleString();
-                const tempoPassado = calcularTempoPassado(resposta.data);
-                
-                const resultado = resposta.respostas[0] && resposta.respostas[1] ? '✅ Confirmado' :
-                                !resposta.respostas[0] && !resposta.respostas[1] ? '❌ Recusado' :
-                                '⚠️ Indeciso';
-                
-                const etapasHTML = resposta.respostas.map((r, i) => `
-                    <div class="etapa-resposta ${r ? 'etapa-sim' : 'etapa-nao'}">
-                        ${i === 0 ? 'Começar?' : 'Certeza?'}: ${r ? 'Sim' : 'Não'}
-                    </div>
-                `).join('');
-                
-                html += `
-                    <div class="resposta-item">
-                        <div class="resposta-info">
-                            <span>${resposta.dispositivo}</span>
-                            <span>${tempoPassado}</span>
-                        </div>
-                        <div class="resposta-conteudo">
-                            <strong>${resultado}</strong>
-                            ${index === 0 ? '<span class="novo-badge">NOVO</span>' : ''}
-                        </div>
-                        <div class="resposta-etapas">
-                            ${etapasHTML}
-                        </div>
-                        <div class="resposta-info">
-                            <span>${data}</span>
-                        </div>
-                    </div>
-                `;
+        // Aplicar efeito de digitação após carregar a página
+        window.addEventListener('load', function() {
+            const typingElements = document.querySelectorAll('.highlight');
+            typingElements.forEach((el, index) => {
+                const originalText = el.textContent;
+                setTimeout(() => {
+                    typeWriter(el, originalText, 80);
+                }, 1000 + (index * 500));
             });
-            
-            lista.innerHTML = html;
-        }
-        
-        function calcularTempoPassado(dataString) {
-            const agora = new Date();
-            const data = new Date(dataString);
-            const diffMs = agora - data;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            
-            if (diffMins < 1) return 'Agora mesmo';
-            if (diffMins < 60) return `Há ${diffMins} min`;
-            if (diffHours < 24) return `Há ${diffHours} h`;
-            return `Há ${Math.floor(diffHours / 24)} dias`;
-        }
-        
-        // CSS para animação de shake e badge
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-5px); }
-                75% { transform: translateX(5px); }
-            }
-            
-            .btn-flutuante[data-count]::after {
-                content: attr(data-count);
-                position: absolute;
-                top: -5px;
-                right: -5px;
-                background: #ff4444;
-                color: white;
-                border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                font-size: 0.7rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-weight: bold;
-            }
-        `;
-        document.head.appendChild(style);
+        });
     </script>
 </body>
 </html>
