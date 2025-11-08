@@ -14,8 +14,8 @@
         }
         
         body {
-            background: linear-gradient(135deg, #ffe6f2, #ffd1dc, #ffecf5);
-            color: #8a4b76;
+            background: #000;
+            color: #fff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -23,23 +23,32 @@
             padding: 20px;
             position: relative;
             overflow-x: hidden;
+            transition: background-color 0.5s ease;
+        }
+        
+        body.darkened {
+            background-color: #0a0a0a;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.92);
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.25);
+            background: linear-gradient(135deg, #111, #222);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.2);
             padding: 40px;
             text-align: center;
             position: relative;
             overflow: hidden;
-            border: 2px solid #ffb6c1;
-            backdrop-filter: blur(10px);
+            border: 1px solid #333;
+            transition: filter 0.5s ease;
         }
         
-        .floating-elements {
+        body.darkened .container {
+            filter: brightness(0.7);
+        }
+        
+        .hearts {
             position: absolute;
             top: 0;
             left: 0;
@@ -49,93 +58,63 @@
             z-index: 0;
         }
         
-        .floating-element {
+        .heart {
             position: absolute;
-            font-size: 24px;
+            color: #ff1493;
+            font-size: 20px;
             opacity: 0.7;
-            animation: float 6s infinite ease-in-out;
+            animation: float 5s infinite ease-in-out;
         }
         
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(10deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
         }
         
         h1 {
-            color: #ff6b93;
+            color: #ff1493;
             font-size: 2.8rem;
             margin-bottom: 20px;
             position: relative;
             z-index: 1;
-            text-shadow: 2px 2px 0px #ffd1e6;
+            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
         }
         
         h2 {
-            color: #ff8fab;
+            color: #ff69b4;
             margin-bottom: 20px;
             font-size: 1.8rem;
-            position: relative;
-            display: inline-block;
-        }
-        
-        h2:after {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            left: 10%;
-            width: 80%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ff8fab, transparent);
         }
         
         .greeting {
             font-size: 1.8rem;
-            color: #ff6b93;
+            color: #ff69b4;
             margin-bottom: 30px;
             position: relative;
             z-index: 1;
-            padding: 15px;
-            background: rgba(255, 182, 193, 0.2);
-            border-radius: 15px;
-            display: inline-block;
-        }
-        
-        .special-date {
-            background: linear-gradient(135deg, #ff8fab, #ff6b93);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            margin: 15px 0;
-            display: inline-block;
-            box-shadow: 0 5px 15px rgba(255, 107, 147, 0.4);
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 2;
         }
         
         .section {
-            background-color: rgba(255, 240, 245, 0.7);
-            border-radius: 20px;
+            background-color: rgba(40, 40, 40, 0.7);
+            border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
-            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 1;
-            border: 1px solid #ffd1e6;
+            border-left: 5px solid #ff1493;
             text-align: left;
-            transition: transform 0.3s ease;
         }
         
-        .section:hover {
-            transform: translateY(-5px);
+        .section-right {
+            border-left: none;
+            border-right: 5px solid #ff1493;
         }
         
         .section p {
             font-size: 1.2rem;
             line-height: 1.6;
-            color: #8a4b76;
+            color: #ddd;
             margin-bottom: 15px;
         }
         
@@ -146,52 +125,49 @@
         .message {
             font-size: 1.3rem;
             line-height: 1.6;
-            color: #8a4b76;
+            color: #eee;
             margin: 30px 0;
             position: relative;
             z-index: 1;
-            background: linear-gradient(135deg, #ffe6f2, #ffd1e6);
+            background-color: rgba(30, 30, 30, 0.7);
             padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
-            border: 2px dashed #ff8fab;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid #333;
         }
         
         .qualities {
-            background: linear-gradient(135deg, #fff0f5, #ffe6f2);
-            border-radius: 20px;
+            background-color: rgba(50, 50, 50, 0.7);
+            border-radius: 15px;
             padding: 30px;
             margin: 30px 0;
-            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
             position: relative;
             z-index: 1;
-            border: 2px solid #ffb6c1;
+            border-left: 5px solid #ff1493;
         }
         
         .qualities ul {
             list-style-type: none;
             text-align: left;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 10px;
         }
         
         .qualities li {
             padding: 12px 0;
             font-size: 1.2rem;
-            color: #8a4b76;
+            color: #ddd;
             position: relative;
             padding-left: 40px;
             transition: all 0.3s ease;
         }
         
         .qualities li:hover {
-            color: #ff6b93;
+            color: #fff;
             transform: translateX(5px);
         }
         
         .qualities li:before {
-            content: "💖";
+            content: "❤️";
             position: absolute;
             left: 0;
             top: 12px;
@@ -200,16 +176,13 @@
         
         .footer {
             margin-top: 30px;
-            color: #ff6b93;
+            color: #ff69b4;
             font-size: 1.2rem;
             position: relative;
             z-index: 1;
-            padding: 20px;
-            background: rgba(255, 240, 245, 0.7);
-            border-radius: 15px;
         }
         
-        .bubbles {
+        .stars {
             position: absolute;
             top: 0;
             left: 0;
@@ -219,65 +192,50 @@
             z-index: 0;
         }
         
-        .bubble {
+        .star {
             position: absolute;
-            background: rgba(255, 182, 193, 0.3);
+            background-color: #fff;
             border-radius: 50%;
-            animation: rise 8s infinite ease-in-out;
+            animation: twinkle 3s infinite ease-in-out;
         }
         
-        @keyframes rise {
-            0% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-100px) scale(1);
-                opacity: 0;
-            }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
         }
         
         .nickname-changer {
             margin: 20px 0;
             padding: 15px;
-            background: rgba(255, 240, 245, 0.7);
-            border-radius: 15px;
+            background: rgba(40, 40, 40, 0.7);
+            border-radius: 10px;
             display: inline-block;
-            border: 1px solid #ffd1e6;
         }
         
         .change-btn {
-            background: linear-gradient(135deg, #ff8fab, #ff6b93);
+            background: #ff1493;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 20px;
             border-radius: 50px;
             cursor: pointer;
             font-size: 1rem;
             transition: all 0.3s ease;
             margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(255, 107, 147, 0.4);
         }
         
         .change-btn:hover {
+            background: #ff69b4;
             transform: scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 107, 147, 0.6);
         }
         
         .highlight {
-            color: #ff6b93;
+            color: #ff69b4;
             font-weight: bold;
-            background: rgba(255, 182, 193, 0.2);
-            padding: 2px 8px;
-            border-radius: 8px;
-            display: inline-block;
         }
         
         .special-btn {
-            background: linear-gradient(135deg, #ff8fab, #ff6b93);
+            background: linear-gradient(45deg, #ff1493, #8a2be2);
             color: white;
             border: none;
             padding: 20px 40px;
@@ -287,18 +245,18 @@
             font-weight: bold;
             transition: all 0.3s ease;
             margin: 30px 0;
-            box-shadow: 0 10px 25px rgba(255, 107, 147, 0.4);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
             position: relative;
             z-index: 10;
         }
         
         .special-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 15px 30px rgba(255, 107, 147, 0.6);
+            box-shadow: 0 12px 30px rgba(255, 20, 147, 0.6);
         }
         
         .second-btn {
-            background: linear-gradient(135deg, #ffb6c1, #ff8fab);
+            background: linear-gradient(45deg, #8a2be2, #ff1493);
             color: white;
             border: none;
             padding: 15px 30px;
@@ -308,14 +266,14 @@
             font-weight: bold;
             transition: all 0.3s ease;
             margin: 20px 0;
-            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
             position: relative;
             z-index: 10;
         }
         
         .second-btn:hover {
             transform: scale(1.08);
-            box-shadow: 0 12px 25px rgba(255, 182, 193, 0.6);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.6);
         }
         
         /* Efeitos especiais */
@@ -325,7 +283,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 240, 245, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 999;
             display: none;
         }
@@ -369,19 +327,14 @@
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
             font-size: 4rem;
-            color: #ff6b93;
-            text-shadow: 0 0 20px rgba(255, 107, 147, 0.8), 0 0 30px rgba(255, 107, 147, 0.6);
+            color: #ff1493;
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 30px rgba(255, 20, 147, 0.6);
             z-index: 1001;
             opacity: 0;
             font-weight: bold;
             text-align: center;
             line-height: 1.3;
             display: none;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px 50px;
-            border-radius: 25px;
-            box-shadow: 0 20px 40px rgba(255, 107, 147, 0.4);
-            border: 3px solid #ffb6c1;
         }
         
         .love-message.active {
@@ -411,24 +364,28 @@
             }
         }
         
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
         }
         
         .god-message {
-            background: linear-gradient(135deg, rgba(255, 182, 193, 0.8), rgba(255, 107, 147, 0.8));
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(255, 20, 147, 0.8));
             color: white;
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 30px;
             margin: 25px 0;
-            box-shadow: 0 10px 25px rgba(255, 107, 147, 0.4);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.4);
             text-align: center;
             font-size: 1.4rem;
             line-height: 1.7;
             display: none;
-            border: 2px solid #ff8fab;
+            border: 2px solid #ff69b4;
             position: relative;
             z-index: 1;
         }
@@ -447,53 +404,11 @@
             color: #fff;
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
             font-size: 1.5rem;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .cute-divider {
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #ff8fab, transparent);
-            margin: 30px 0;
-            border-radius: 50%;
-        }
-        
-        .header-decoration {
-            position: relative;
-            margin-bottom: 30px;
-        }
-        
-        .header-decoration:before, .header-decoration:after {
-            content: "💖";
-            font-size: 2rem;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        .header-decoration:before {
-            left: 10%;
-        }
-        
-        .header-decoration:after {
-            right: 10%;
-        }
-        
-        .kiss-date {
-            background: linear-gradient(135deg, #ffb6c1, #ff8fab);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            margin: 20px 0;
-            display: inline-block;
-            box-shadow: 0 8px 20px rgba(255, 182, 193, 0.4);
-            animation: pulse 2s infinite;
         }
         
         @media (max-width: 768px) {
             .love-message {
                 font-size: 2.5rem;
-                padding: 20px 30px;
             }
             
             .special-heart {
@@ -503,24 +418,6 @@
             .god-message {
                 font-size: 1.2rem;
                 padding: 20px;
-            }
-            
-            .header-decoration:before, .header-decoration:after {
-                display: none;
-            }
-            
-            .special-date {
-                font-size: 1rem;
-                padding: 10px 20px;
-                position: relative;
-                top: 0;
-                right: 0;
-                margin: 15px auto;
-            }
-            
-            .kiss-date {
-                font-size: 1.1rem;
-                padding: 12px 25px;
             }
         }
         
@@ -562,123 +459,110 @@
                 padding: 12px 25px;
                 font-size: 1.1rem;
             }
-            
-            .qualities ul {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="bubbles" id="bubbles"></div>
+    <div class="stars" id="stars"></div>
     
     <div class="container">
-        <div class="floating-elements" id="floatingElements"></div>
+        <div class="hearts" id="hearts"></div>
         
-        <div class="header-decoration">
-            <h1>Para Minha Princesa Maria</h1>
-        </div>
+        <h1>Para Minha Princesa Maria</h1>
         
         <div class="greeting">
-            <p>Oiá, <span id="nickname">Minha princesa</span>! 💕</p>
-        </div>
-        
-        <div class="kiss-date">
-            💋 06/11/2025 - Nosso Primeiro Beijo 💋
+            <p>Olá, <span id="nickname">Minha Princesa</span>!</p>
         </div>
         
         <div class="nickname-changer">
-            <p>Como posso te chamar hoje? 🥰</p>
+            <p>Como posso te chamar hoje?</p>
             <button class="change-btn" onclick="changeNickname()">Mudar Apelido</button>
         </div>
         
-        <div class="cute-divider"></div>
-        
         <div class="section">
             <h2>Desde que te conheci...</h2>
-            <p>Lembro perfeitamente do dia em que nossos caminhos se cruzaram e minha vida ganhou um novo significado. Algo especial despertou em mim naquele momento e soube que nada mais seria como antes. 💘</p>
-            <p>Cada instante desde que te conheci foi confirmando o que meu coração já sentia: <span class="highlight">você é a pessoa que eu sempre esperei</span>.</p>
-            <p>Seu jeito de ser conquistou meu coração desde o primeiro momento. Seu sorriso iluminou meus dias, e seu amor foi preenchendo cada espaço da minha alma. 🌈</p>
+            <p>Desde o primeiro momento em que nossos olhares se cruzaram, algo dentro de mim mudou para sempre. Eu ainda não sabia, mas já estava completamente apaixonado por você.</p>
+            <p>Cada conversa, cada risada compartilhada, cada momento ao seu lado só confirmava o que meu coração já sabia: <span class="highlight">você era a pessoa que eu sempre procurei</span>.</p>
+            <p>Seu sorriso ilumina meus dias, sua voz acalma minha alma, e seu amor preenche cada espaço vazio dentro de mim. Desde que te conheci, minha vida ganhou cores que nem sabia que existiam.</p>
         </div>
         
-        <div class="section">
-            <h2>Nosso primeiro beijo</h2>
-            <p>Hoje, dia <span class="highlight">06 de Novembro de 2025</span>, foi um dia que ficará marcado para sempre na minha memória. Nosso primeiro beijo foi a realização de todos os meus sonhos. 💋</p>
-            <p>Nunca imaginei que um simples beijo pudesse carregar tanta emoção, tanto sentimento, tanta verdade. Foi como se todas as estrelas do céu se alinhassem naquele momento perfeito.</p>
-            <p>Seu beijo foi doce, suave e cheio de significado. Senti que era o começo de algo lindo, algo que sempre desejei mas nunca imaginei que poderia ser tão especial. ✨</p>
-        </div>
-        
-        <div class="section">
+        <div class="section section-right">
             <h2>O que sinto por você</h2>
-            <p>Desde que te conheci, meu amor por você só fez crescer. É como uma plantinha que regamos todos os dias e que se transformou na árvore mais linda do meu jardim. 💞</p>
-            <p><span class="highlight">Você se tornou meu lugar favorito</span>. Não importa a distância, quando estou com você me sinto em casa. Seu abraço é meu abrigo, seu carinho meu maior conforto. 🏡</p>
-            <p>Amo cada particularidade sua que fui descobrindo desde o início: seu jeito único de ver o mundo, sua sensibilidade, a forma como se importa comigo. 👀💖</p>
+            <p>Meu amor por você é como um rio que nunca para de correr. Começou como um pequeno filete e hoje é uma correnteza forte que carrega meus sonhos, meus desejos e minha felicidade.</p>
+            <p><span class="highlight">Você é o meu lugar favorito no mundo inteiro</span>. Não importa onde estejamos, se estou ao seu lado, estou em casa. Seu abraço é o meu refúgio, seu colo é o meu conforto, seu amor é a minha paz.</p>
+            <p>Amo a maneira como você ri, como seus olhos brilham quando está feliz, como você me olha quando acho que ninguém está prestando atenção.</p>
         </div>
         
         <div class="section">
-            <h2>Nossa história</h2>
-            <p>Guardo cada momento desde que te conheci como os tesouros mais preciosos. Das primeiras conversas aos longos papos que faziam o tempo passar voando. 💎</p>
-            <p>Desde que te conheci, dormir pensando em você se tornou meu ritual mais querido. <span class="highlight">Nossos sonhos compartilhados são minha viagem preferida</span>, mas construir nossa história é minha maior aventura. 💭</p>
-            <p>Cada "oi" seu continua sendo como o primeiro raio de sol da manhã, trazendo luz e calor para minha existência. ☀️</p>
+            <h2>Nossos momentos</h2>
+            <p>Guardo cada momento nosso como um tesouro precioso. Desde as conversas mais simples até os abraços mais apertados, tudo com você se torna especial.</p>
+            <p>Adormecer pensando em você e acordar com seu nome na mente se tornou a minha rotina favorita. <span class="highlight">Sonhar com você é o meu passatempo preferido</span>, mas estar ao seu lado é a minha realidade mais amada.</p>
+            <p>Cada "bom dia" seu é como um raio de sol entrando pela janela da minha alma, iluminando todo o meu ser.</p>
+        </div>
+        
+        <div class="section section-right">
+            <h2>O que você significa para mim</h2>
+            <p>Você é a melodia da minha música favorita, a estrofe mais bonita do meu poema, a cena mais emocionante do meu filme.</p>
+            <p><span class="highlight">Você transformou minha vida em algo extraordinário</span>. Antes de você, eu apenas existia. Depois de você, eu comecei a viver de verdade.</p>
+            <p>Se eu pudesse escolher novamente entre todas as pessoas do mundo, eu escolheria você milhões de vezes. Em cada vida, em cada universo, em cada possibilidade.</p>
         </div>
         
         <div class="message">
-            <p>Você é a mulher mais incrível que já conheci e me sinto o <span class="highlight">homem mais abençoado do universo</span> por ter te conhecido. 🍀</p>
-            <p>Você é uma pessoa tão especial e <span class="highlight">prometo valorizar cada dia ao seu lado</span>. Desde que te conheci, cada momento é um presente que guardo com carinho no meu coração. 🎁</p>
-            <p>Obrigado por ter entrado na minha vida e por ser essa pessoa maravilhosa que você é. 🙏</p>
+            <p>Você é uma mulher incrível e eu sou o <span class="highlight">HOMEM mais sortudo desse mundo</span> por poder falar que tenho você ao meu lado.</p>
+            <p>Você é uma mulher muitooo querida e que eu <span class="highlight">nunca quero te perder</span>. Cada dia ao seu lado é um presente que eu guardo com todo cuidado no meu coração.</p>
+            <p>Obrigado por ser exatamente quem você é, e por me permitir fazer parte da sua vida. Prometo honrar esse privilégio todos os dias.</p>
         </div>
         
         <div class="qualities">
-            <h2>Meu amor, você é: 💫</h2>
+            <h2>Meu amor, você é:</h2>
             <ul>
-                <li>Radiante como o sol</li>
-                <li>Encantadora desde o primeiro dia</li>
-                <li>Com um coração puro e verdadeiro</li>
-                <li>Generosa e compassiva</li>
-                <li>Uma pessoa de valores sólidos</li>
-                <li>Sincera e autêntica</li>
-                <li>Meu porto seguro</li>
+                <li>Linda</li>
+                <li>Maravilhosa</li>
+                <li>Cheirosa</li>
+                <li>Gentil</li>
+                <li>Uma pessoa de caráter</li>
+                <li>Uma pessoa honesta</li>
+                <li>Uma pessoa que sempre posso contar</li>
                 <li>Inteligente e perspicaz</li>
-                <li>Minha companheira de jornada</li>
-                <li>Meu maior incentivo</li>
+                <li>Companheira em todos os momentos</li>
+                <li>Meu porto seguro</li>
                 <li>Minha melhor amiga</li>
-                <li>A luz que chegou na minha vida</li>
+                <li>A razão do meu sorriso</li>
             </ul>
         </div>
         
         <div class="section">
-            <h2>Minhas promessas para você</h2>
-            <p>Prometo honrar nosso amor que nasceu desde que nos conhecemos, respeitar seus sonhos e cuidar do que construímos. Serei seu apoio nos dias difíceis e seu companheiro nos felizes. 🤝</p>
-            <p><span class="highlight">Prometo fazer você se sentir amada todos os dias</span>, lembrando sempre do valor que você tem. Prometo ser o espelho que reflete toda sua beleza interior. 💪</p>
-            <p>E acima de tudo, prometo que meu amor por você, que nasceu quando te conheci, só se fortalecerá com o tempo, porque você é a melhor coisa que aconteceu na minha vida. 📈</p>
+            <h2>Meu compromisso com você</h2>
+            <p>Prometo sempre te amar, respeitar e cuidar de você. Prometo ser seu porto seguro, seu ombro amigo, seu companheiro de todas as horas.</p>
+            <p><span class="highlight">Prometo fazer você se sentir amada todos os dias</span>, mesmo nos dias difíceis. Prometo lembrar você de como é incrível, mesmo quando você duvidar.</p>
+            <p>E acima de tudo, prometo que meu amor por você só vai crescer a cada dia que passar, porque você é a melhor coisa que já aconteceu na minha vida.</p>
         </div>
         
-        <button class="special-btn" onclick="showSpecialEffect()">Clique Aqui, Amor! 💖</button>
+        <button class="special-btn" onclick="showSpecialEffect()">Clique aqui</button>
         
-        <button class="second-btn" onclick="showGodMessage()">Tem uma Surpresinha Aqui! 🎀</button>
+        <button class="second-btn" onclick="showGodMessage()">Clica aqui kk</button>
         
         <div class="god-message" id="godMessage">
-            <p><span class="highlight">Quero compartilhar algo muito especial com você</span></p>
-            <p>Desde que te conheci, meu amor por você só cresce e me transforma em uma pessoa melhor. Você me inspira a ser mais paciente, mais grato, mais humano. E isso me aproxima cada vez mais de Deus. 🙏✨</p>
-            <p>Obrigado por ter entrado na minha vida e por ser essa bênção constante.</p>
+            <p><span class="highlight">Então aqui eu quis falar um pouco dos meus sentimentos.</span></p>
+            <p>Eu penso que eu cada vez estou me apaixonando mais por você só tenho a te agradecer póis você está cada dia mais me fazendo eu me aproximar de Deus.</p>
         </div>
         
         <div class="footer">
-            <p>Com todo meu amor, desde que te conheci e para sempre 💞</p>
-            <p>Seu eterno admirador ❤️</p>
+            <p>Com todo meu amor, para sempre</p>
+            <p>Seu grande amor ❤️</p>
         </div>
     </div>
 
     <!-- Elementos para o efeito especial -->
     <div class="special-overlay" id="specialOverlay"></div>
     <div class="special-hearts" id="specialHearts"></div>
-    <div class="love-message" id="loveMessage">EU TE AMO<br>DESDE QUE<br>TE CONHECI! 💕</div>
+    <div class="love-message" id="loveMessage">Só saiba que Eu Te Amo❤️</div>
 
     <script>
-        // Criar elementos flutuantes
-        const floatingContainer = document.getElementById('floatingElements');
-        const bubblesContainer = document.getElementById('bubbles');
-        const nicknames = ["Minha princesa", "Meu grande amor", "Minha vida", "Minha estrela", "Minha razão de viver", "Minha rainha", "Meu tudo"];
+        // Criar corações flutuantes
+        const heartsContainer = document.getElementById('hearts');
+        const starsContainer = document.getElementById('stars');
+        const nicknames = ["Minha princesa", "Meu Bem", "Minha neném", "Minha vida", "Meu amor", "Minha rainha", "Meu tudo"];
         let currentNicknameIndex = 0;
         const nicknameElement = document.getElementById('nickname');
         
@@ -688,31 +572,31 @@
         const loveMessage = document.getElementById('loveMessage');
         const godMessage = document.getElementById('godMessage');
         
-        // Criar elementos flutuantes (corações, estrelas, etc.)
-        const floatingSymbols = ["💖", "💕", "✨", "🌟", "🥰", "💫", "🌸", "🦄"];
-        for (let i = 0; i < 20; i++) {
-            const element = document.createElement('div');
-            element.classList.add('floating-element');
-            element.innerHTML = floatingSymbols[Math.floor(Math.random() * floatingSymbols.length)];
-            element.style.left = Math.random() * 100 + '%';
-            element.style.top = Math.random() * 100 + '%';
-            element.style.animationDelay = Math.random() * 6 + 's';
-            element.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            floatingContainer.appendChild(element);
+        // Criar corações
+        for (let i = 0; i < 25; i++) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.top = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heartsContainer.appendChild(heart);
         }
         
-        // Criar bolhas
-        for (let i = 0; i < 80; i++) {
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-            bubble.style.left = Math.random() * 100 + '%';
-            bubble.style.width = (Math.random() * 30 + 10) + 'px';
-            bubble.style.height = bubble.style.width;
-            bubble.style.animationDelay = Math.random() * 8 + 's';
-            bubblesContainer.appendChild(bubble);
+        // Criar estrelas
+        for (let i = 0; i < 150; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = (Math.random() * 3 + 1) + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
         }
         
-        // Alternar entre os apelidos (SOMENTE quando clicar no botão)
+        // Alternar entre os apelidos
         function changeNickname() {
             currentNicknameIndex = (currentNicknameIndex + 1) % nicknames.length;
             nicknameElement.textContent = nicknames[currentNicknameIndex];
@@ -724,40 +608,49 @@
             }, 300);
         }
         
-        // Adicionar efeito de clique para criar mais elementos
+        // Mudar apelido automaticamente a cada 5 segundos
+        setInterval(changeNickname, 5000);
+        
+        // Adicionar efeito de clique para criar mais corações
         document.addEventListener('click', function(e) {
-            const element = document.createElement('div');
-            element.classList.add('floating-element');
-            element.innerHTML = "💖";
-            element.style.left = e.clientX + 'px';
-            element.style.top = e.clientY + 'px';
-            element.style.fontSize = (Math.random() * 20 + 15) + 'px';
-            element.style.animation = 'float 3s ease-in-out forwards';
-            document.body.appendChild(element);
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animation = 'float 3s ease-in-out forwards';
+            document.body.appendChild(heart);
             
-            // Remover elemento após animação
+            // Remover coração após animação
             setTimeout(() => {
-                element.remove();
+                heart.remove();
             }, 3000);
         });
         
         // Efeito especial do botão
         function showSpecialEffect() {
+            // Escurecer o fundo
+            document.body.classList.add('darkened');
+            
             // Mostrar overlay
             specialOverlay.style.display = 'block';
             
             // Mostrar corações especiais
             specialHearts.style.display = 'block';
             
-            // Criar corações coloridos
-            const heartColors = ['#ff6b93', '#ff8fab', '#ffb6c1', '#ffd1e6'];
+            // Criar corações vermelhos escuros e roxos
             for (let i = 0; i < 80; i++) {
                 const heart = document.createElement('div');
                 heart.classList.add('special-heart');
-                heart.innerHTML = '💖';
+                heart.innerHTML = '❤';
                 
-                // Cores aleatórias
-                heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                // Cores alternadas entre vermelho escuro e roxo
+                if (i % 2 === 0) {
+                    heart.style.color = '#8B0000'; // Vermelho escuro
+                } else {
+                    heart.style.color = '#8A2BE2'; // Roxo
+                }
                 
                 heart.style.left = Math.random() * 100 + '%';
                 heart.style.fontSize = (Math.random() * 40 + 30) + 'px';
@@ -775,6 +668,7 @@
             
             // Remover elementos após a animação
             setTimeout(() => {
+                document.body.classList.remove('darkened');
                 specialOverlay.style.display = 'none';
                 specialHearts.style.display = 'none';
                 loveMessage.classList.remove('active', 'pulse');
@@ -791,20 +685,21 @@
             // Rolar suavemente até a mensagem
             godMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
             
-            // Adicionar alguns elementos especiais
+            // Adicionar alguns corações especiais
             for (let i = 0; i < 15; i++) {
-                const element = document.createElement('div');
-                element.classList.add('floating-element');
-                element.innerHTML = "✨";
-                element.style.left = Math.random() * 100 + '%';
-                element.style.top = Math.random() * 100 + '%';
-                element.style.animationDelay = Math.random() * 5 + 's';
-                element.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                document.body.appendChild(element);
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.color = '#8A2BE2';
+                document.body.appendChild(heart);
                 
-                // Remover elemento após animação
+                // Remover coração após animação
                 setTimeout(() => {
-                    element.remove();
+                    heart.remove();
                 }, 5000);
             }
         }
@@ -838,3 +733,6 @@
     </script>
 </body>
 </html>
+
+
+Mude tudo do suite e reescreva tudo e deixe mt fofo
