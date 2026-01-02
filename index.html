@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para Duda</title>
+    <title>Para Duda - Minha Amiga Especial</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Playfair+Display:wght@400;700&family=Inter:wght@300;400&display=swap" rel="stylesheet">
@@ -17,14 +17,13 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #1a0b0e 0%, #2d1118 50%, #3a1421 100%);
-            color: #f5e6ea;
+            background: linear-gradient(135deg, #0f1a2b 0%, #1a2b3c 50%, #253546 100%);
+            color: #e6f2ff;
             line-height: 1.8;
             overflow-x: hidden;
             min-height: 100vh;
         }
 
-        /* Textura de fundo sutil */
         body::before {
             content: '';
             position: fixed;
@@ -33,13 +32,12 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 85% 30%, rgba(255, 119, 198, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 50% 80%, rgba(198, 119, 255, 0.05) 0%, transparent 20%);
+                radial-gradient(circle at 15% 50%, rgba(100, 150, 255, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 85% 30%, rgba(100, 200, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 80%, rgba(150, 200, 255, 0.05) 0%, transparent 20%);
             z-index: -1;
         }
 
-        /* Partículas flutuantes */
         .particles {
             position: fixed;
             top: 0;
@@ -53,7 +51,7 @@
         .particle {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 182, 193, 0.15);
+            background: rgba(100, 200, 255, 0.15);
             animation: float 20s infinite linear;
         }
 
@@ -71,7 +69,6 @@
             position: relative;
         }
 
-        /* Cabeçalho */
         header {
             text-align: center;
             padding: 80px 0 60px;
@@ -85,7 +82,7 @@
             transform: translate(-50%, -50%);
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, rgba(183, 110, 121, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(100, 180, 255, 0.15) 0%, transparent 70%);
             z-index: -1;
         }
 
@@ -96,8 +93,8 @@
             margin-bottom: 15px;
             font-weight: 400;
             letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(255, 182, 193, 0.5),
-                         0 0 60px rgba(183, 110, 121, 0.3);
+            text-shadow: 0 0 30px rgba(100, 200, 255, 0.5),
+                         0 0 60px rgba(70, 150, 220, 0.3);
             position: relative;
             display: inline-block;
         }
@@ -108,14 +105,14 @@
             left: 50%;
             transform: translateX(-50%);
             font-size: 2rem;
-            color: #b76e79;
+            color: #64b4ff;
             opacity: 0.7;
         }
 
         .subtitle {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2rem;
-            color: #e8b4bc;
+            color: #a8d2ff;
             font-weight: 300;
             margin-top: 30px;
             font-style: italic;
@@ -125,7 +122,12 @@
             text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
-        /* Seções */
+        .friend-name {
+            color: #64b4ff;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(100, 180, 255, 0.5);
+        }
+
         .section {
             margin-bottom: 80px;
             position: relative;
@@ -155,19 +157,18 @@
             transform: translateX(-50%);
             width: 80px;
             height: 3px;
-            background: linear-gradient(90deg, transparent, #b76e79, transparent);
+            background: linear-gradient(90deg, transparent, #64b4ff, transparent);
             border-radius: 3px;
         }
 
-        /* Cartões */
         .card {
-            background: linear-gradient(145deg, rgba(58, 20, 33, 0.8), rgba(42, 15, 25, 0.9));
+            background: linear-gradient(145deg, rgba(37, 53, 70, 0.8), rgba(26, 43, 60, 0.9));
             border-radius: 20px;
             padding: 50px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4),
                         inset 0 1px 0 rgba(255, 255, 255, 0.1);
             transition: transform 0.4s ease, box-shadow 0.4s ease;
-            border: 1px solid rgba(183, 110, 121, 0.2);
+            border: 1px solid rgba(100, 180, 255, 0.2);
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
@@ -180,7 +181,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent 30%, rgba(183, 110, 121, 0.05) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(100, 180, 255, 0.05) 50%, transparent 70%);
             z-index: 1;
             pointer-events: none;
         }
@@ -189,7 +190,7 @@
             transform: translateY(-10px);
             box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5),
                         inset 0 1px 0 rgba(255, 255, 255, 0.15);
-            border-color: rgba(183, 110, 121, 0.3);
+            border-color: rgba(100, 180, 255, 0.3);
         }
 
         .message {
@@ -197,19 +198,18 @@
             font-size: 1.5rem;
             text-align: center;
             line-height: 1.9;
-            color: #f0d6df;
+            color: #d1e7ff;
             margin-bottom: 25px;
             position: relative;
             z-index: 2;
         }
 
         .highlight {
-            color: #ffb6c1;
+            color: #64b4ff;
             font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 182, 193, 0.3);
+            text-shadow: 0 0 10px rgba(100, 180, 255, 0.3);
         }
 
-        /* Qualidades */
         .qualities-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -218,12 +218,12 @@
         }
 
         .quality-item {
-            background: linear-gradient(135deg, rgba(72, 25, 40, 0.8), rgba(58, 20, 33, 0.9));
+            background: linear-gradient(135deg, rgba(45, 65, 85, 0.8), rgba(37, 53, 70, 0.9));
             border-radius: 15px;
             padding: 30px 25px;
             text-align: center;
             transition: all 0.4s ease;
-            border: 1px solid rgba(183, 110, 121, 0.2);
+            border: 1px solid rgba(100, 180, 255, 0.2);
             position: relative;
             overflow: hidden;
         }
@@ -235,7 +235,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 182, 193, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(100, 200, 255, 0.1) 0%, transparent 70%);
             opacity: 0;
             transition: opacity 0.4s ease;
         }
@@ -246,28 +246,27 @@
 
         .quality-item:hover {
             transform: translateY(-8px) scale(1.03);
-            border-color: rgba(183, 110, 121, 0.4);
+            border-color: rgba(100, 180, 255, 0.4);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
 
         .quality-icon {
             font-size: 2.8rem;
-            color: #ffb6c1;
+            color: #64b4ff;
             margin-bottom: 20px;
-            text-shadow: 0 0 15px rgba(255, 182, 193, 0.5);
+            text-shadow: 0 0 15px rgba(100, 180, 255, 0.5);
             position: relative;
             z-index: 2;
         }
 
         .quality-text {
             font-size: 1.3rem;
-            color: #e8b4bc;
+            color: #a8d2ff;
             font-weight: 500;
             position: relative;
             z-index: 2;
         }
 
-        /* Memórias */
         .memories-container {
             display: flex;
             flex-direction: column;
@@ -280,23 +279,23 @@
             gap: 30px;
             padding: 30px;
             border-radius: 15px;
-            background: linear-gradient(135deg, rgba(65, 23, 37, 0.7), rgba(50, 18, 29, 0.8));
-            border: 1px solid rgba(183, 110, 121, 0.15);
+            background: linear-gradient(135deg, rgba(52, 72, 95, 0.7), rgba(45, 65, 85, 0.8));
+            border: 1px solid rgba(100, 180, 255, 0.15);
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
         .memory:hover {
             transform: translateX(10px);
-            border-color: rgba(183, 110, 121, 0.3);
+            border-color: rgba(100, 180, 255, 0.3);
         }
 
         .memory-number {
             font-family: 'Playfair Display', serif;
             font-size: 3.5rem;
-            color: #b76e79;
+            color: #64b4ff;
             font-weight: 300;
             min-width: 80px;
-            text-shadow: 0 0 15px rgba(183, 110, 121, 0.5);
+            text-shadow: 0 0 15px rgba(100, 180, 255, 0.5);
         }
 
         .memory-content {
@@ -306,7 +305,7 @@
         .memory-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
-            color: #ffb6c1;
+            color: #64b4ff;
             margin-bottom: 15px;
             text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
@@ -314,19 +313,18 @@
         .memory-description {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.4rem;
-            color: #e8c6cf;
+            color: #c2dfff;
             line-height: 1.8;
         }
 
-        /* Poema */
         .poem-container {
             position: relative;
             padding: 70px 50px;
-            background: linear-gradient(135deg, rgba(72, 25, 40, 0.9), rgba(58, 20, 33, 0.95));
+            background: linear-gradient(135deg, rgba(45, 65, 85, 0.9), rgba(37, 53, 70, 0.95));
             border-radius: 20px;
             margin: 50px 0;
             text-align: center;
-            border: 1px solid rgba(183, 110, 121, 0.25);
+            border: 1px solid rgba(100, 180, 255, 0.25);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             overflow: hidden;
         }
@@ -338,7 +336,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 182, 193, 0.05) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(100, 200, 255, 0.05) 50%, transparent 70%);
             animation: shine 8s infinite linear;
         }
 
@@ -351,7 +349,7 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.6rem;
             line-height: 2;
-            color: #f5e6ea;
+            color: #e6f2ff;
             font-style: italic;
             max-width: 800px;
             margin: 0 auto;
@@ -362,7 +360,7 @@
 
         .poem-quote {
             font-size: 5rem;
-            color: #b76e79;
+            color: #64b4ff;
             line-height: 0;
             position: absolute;
             opacity: 0.3;
@@ -372,7 +370,6 @@
         .quote-left { top: 40px; left: 40px; }
         .quote-right { bottom: 40px; right: 40px; }
 
-        /* Mensagem especial */
         .secret-container {
             text-align: center;
             padding: 60px 40px;
@@ -381,7 +378,7 @@
         }
 
         .secret-button {
-            background: linear-gradient(135deg, #b76e79, #8b4a56);
+            background: linear-gradient(135deg, #64b4ff, #4682b4);
             color: white;
             border: none;
             padding: 22px 50px;
@@ -392,7 +389,7 @@
             font-family: 'Inter', sans-serif;
             font-weight: 400;
             letter-spacing: 1.5px;
-            box-shadow: 0 10px 30px rgba(183, 110, 121, 0.4),
+            box-shadow: 0 10px 30px rgba(100, 180, 255, 0.4),
                         inset 0 1px 0 rgba(255, 255, 255, 0.2);
             position: relative;
             overflow: hidden;
@@ -414,20 +411,20 @@
         }
 
         .secret-button:hover {
-            background: linear-gradient(135deg, #c97b87, #9a5563);
+            background: linear-gradient(135deg, #7bc1ff, #5a96cc);
             transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 15px 35px rgba(183, 110, 121, 0.5),
+            box-shadow: 0 15px 35px rgba(100, 180, 255, 0.5),
                         inset 0 1px 0 rgba(255, 255, 255, 0.3);
         }
 
         .secret-message {
             margin-top: 50px;
             padding: 40px;
-            background: linear-gradient(135deg, rgba(58, 20, 33, 0.9), rgba(42, 15, 25, 0.95));
+            background: linear-gradient(135deg, rgba(37, 53, 70, 0.9), rgba(26, 43, 60, 0.95));
             border-radius: 20px;
             display: none;
             animation: fadeInUp 0.8s ease;
-            border: 1px solid rgba(183, 110, 121, 0.3);
+            border: 1px solid rgba(100, 180, 255, 0.3);
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
@@ -448,13 +445,12 @@
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.6rem;
             line-height: 2;
-            color: #f5e6ea;
+            color: #e6f2ff;
             text-align: center;
             position: relative;
             z-index: 2;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 80px 0 50px;
@@ -468,23 +464,23 @@
             transform: translate(-50%, -50%);
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(183, 110, 121, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(100, 180, 255, 0.1) 0%, transparent 70%);
             z-index: -1;
         }
 
         .signature {
             font-family: 'Playfair Display', serif;
             font-size: 3rem;
-            color: #ffb6c1;
+            color: #64b4ff;
             margin: 30px 0;
-            text-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+            text-shadow: 0 0 20px rgba(100, 180, 255, 0.5);
             letter-spacing: 2px;
         }
 
         .closing {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.5rem;
-            color: #e8b4bc;
+            color: #a8d2ff;
             font-style: italic;
             max-width: 600px;
             margin: 0 auto;
@@ -493,7 +489,7 @@
 
         .heart-pulse {
             font-size: 2rem;
-            color: #b76e79;
+            color: #64b4ff;
             margin: 20px 0;
             animation: pulse 2s infinite;
         }
@@ -504,7 +500,6 @@
             100% { transform: scale(1); opacity: 0.7; }
         }
 
-        /* Responsividade */
         @media (max-width: 768px) {
             .container {
                 padding: 20px 15px;
@@ -554,7 +549,6 @@
             }
         }
 
-        /* Efeitos de entrada */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -566,35 +560,33 @@
             transform: translateY(0);
         }
 
-        /* Barra de rolagem personalizada */
         ::-webkit-scrollbar {
             width: 10px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #2d1118;
+            background: #1a2b3c;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(to bottom, #b76e79, #8b4a56);
+            background: linear-gradient(to bottom, #64b4ff, #4682b4);
             border-radius: 5px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(to bottom, #c97b87, #9a5563);
+            background: linear-gradient(to bottom, #7bc1ff, #5a96cc);
         }
     </style>
 </head>
 <body>
-    <!-- Partículas flutuantes -->
     <div class="particles" id="particles"></div>
 
     <div class="container">
         <header>
             <div class="header-glow"></div>
-            <div class="title-decoration"><i class="fas fa-heart"></i></div>
-            <h1 class="fade-in">Meu Bem</h1>
-            <div class="subtitle fade-in">Onde a luz encontra seu lar mais doce</div>
+            <div class="title-decoration"><i class="fas fa-star"></i></div>
+            <h1 class="fade-in">Para <span class="friend-name" id="friendName">Duda</span></h1>
+            <div class="subtitle fade-in">Uma homenagem à amizade que ilumina minha vida</div>
         </header>
 
         <section class="section">
@@ -603,76 +595,76 @@
             </div>
             <div class="card fade-in">
                 <div class="message">
-                    <p>Minha querida Maria, que carinhosamente chamo de Meu Amor
-                    <p>Neste universo vasto e complexo, você emergiu como a constelação mais bela - aquela que guia meus passos e ilumina meus dias.</p>
-                    <p>Sua presença é como a primeira luz da manhã, dissipando as sombras e revelando cores onde antes havia apenas tons de cinza.</p>
-                    <p>Este espaço é um reflexo do que você representa: profundidade, beleza e uma eterna promessa de afeto.</p>
+                    <p>Minha Melhor Amiga Duda</span>,</p>
+                    <p>Em um mundo que muitas vezes parece complicado, você surge como um porto seguro - aquele lugar onde posso ser completamente eu mesmo, sem máscaras ou receios.</p>
+                    <p>Sua amizade é como um farol em noites escuras, guiando-me de volta ao que realmente importa. É o abraço que aquece, a palavra que acalma, a presença que fortalece.</p>
+                    <p>Este espaço é dedicado a celebrar a pessoa incrível que você é e a amizade preciosa que construímos juntos.</p>
                 </div>
             </div>
         </section>
 
         <section class="section">
             <div class="section-header">
-                <h2 class="fade-in">Sua Essência</h2>
+                <h2 class="fade-in">O Que Te Torna Especial</h2>
             </div>
             <div class="qualities-container">
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-gem"></i></div>
-                    <div class="quality-text">Raridade inigualável</div>
+                    <div class="quality-icon"><i class="fas fa-heart"></i></div>
+                    <div class="quality-text">Coração Generoso</div>
                 </div>
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-sun"></i></div>
-                    <div class="quality-text">Calor que acolhe</div>
+                    <div class="quality-icon"><i class="fas fa-laugh-beam"></i></div>
+                    <div class="quality-text">Riso Contagiante</div>
                 </div>
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-music"></i></div>
-                    <div class="quality-text">Harmonia interior</div>
+                    <div class="quality-icon"><i class="fas fa-handshake"></i></div>
+                    <div class="quality-text">Lealdade Inabalável</div>
                 </div>
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-seedling"></i></div>
-                    <div class="quality-text">Crescimento constante</div>
+                    <div class="quality-icon"><i class="fas fa-lightbulb"></i></div>
+                    <div class="quality-text">Sabedoria Única</div>
                 </div>
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-anchor"></i></div>
-                    <div class="quality-text">Firmeza serena</div>
+                    <div class="quality-icon"><i class="fas fa-rocket"></i></div>
+                    <div class="quality-text">Espírito Aventureiro</div>
                 </div>
                 <div class="quality-item fade-in">
-                    <div class="quality-icon"><i class="fas fa-heartbeat"></i></div>
-                    <div class="quality-text">Pulsação compassiva</div>
+                    <div class="quality-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="quality-text">Força Inspiradora</div>
                 </div>
             </div>
         </section>
 
         <section class="section">
             <div class="section-header">
-                <h2 class="fade-in">Memórias</h2>
+                <h2 class="fade-in">Memórias que Guardo</h2>
             </div>
             <div class="card fade-in">
                 <div class="memories-container">
                     <div class="memory">
                         <div class="memory-number">I</div>
                         <div class="memory-content">
-                            <div class="memory-title">Descoberta</div>
+                            <div class="memory-title">O Primeiro Encontro</div>
                             <div class="memory-description">
-                                O momento em que percebi que sua voz não era apenas som, mas uma paisagem sonora onde queria habitar. Cada palavra sua desenhava novos horizontes em meu universo particular.
+                                Lembro como se fosse hoje da primeira vez que nos vimos. Havia algo no seu jeito que instantaneamente me cativou, e naquela primeira conversa eu já sabia que encontraria uma amiga para a vida toda.
                             </div>
                         </div>
                     </div>
                     <div class="memory">
                         <div class="memory-number">II</div>
                         <div class="memory-content">
-                            <div class="memory-title">Ressonância</div>
+                            <div class="memory-title">Noites de Conversa</div>
                             <div class="memory-description">
-                                Aquela risada que ecoa na memória como um sino dourado. O instante em que nossos silêncios se entrelaçaram, criando um diálogo mais profundo que qualquer conversa.
+                                Nossas longas chamadas e noites falando sobre tudo e nada são alguns dos meus momentos favoritos. É nessas horas que sinto que posso compartilhar meus sonhos, medos e bobagens sem medo de julgamento.
                             </div>
                         </div>
                     </div>
                     <div class="memory">
                         <div class="memory-number">III</div>
                         <div class="memory-content">
-                            <div class="memory-title">Sinfonia</div>
+                            <div class="memory-title">Presente nos Momentos Importantes</div>
                             <div class="memory-description">
-                                Como notas que finalmente encontram sua melodia. Seu jeito único de transformar o ordinário em extraordinário, o simples em significativo, o cotidiano em celebração.
+                                Você sempre aparece nos momentos certos: para celebrar uma conquista, apoiar em uma dificuldade ou simplesmente para passar um tempo juntas. Sua presença constante é um presente que nunca deixo de agradecer.
                             </div>
                         </div>
                     </div>
@@ -683,39 +675,40 @@
         <div class="poem-container fade-in">
             <div class="poem-quote quote-left">"</div>
             <div class="poem">
-                Se os oceanos fossem tinta<br>
-                E os céus, pergaminho imenso,<br>
-                Ainda seria pouco espaço<br>
-                Para escrever o que sinto.<br><br>
+                A amizade verdadeira é como uma estrela<br>
+                Que brilha constante no céu noturno,<br>
+                Guiando nossos passos<br>
+                E iluminando nosso caminho.<br><br>
                 
-                Se todas as estrelas virassem palavras<br>
-                E a Via Láctea, um poema,<br>
-                Ainda faltariam versos<br>
-                Para nomear seu reflexo em mim.<br><br>
+                É o porto seguro nas tempestades,<br>
+                O abraço que aquece na solidão,<br>
+                A palavra certa no momento exato,<br>
+                O sorriso que cura qualquer dor.<br><br>
                 
-                Você é o suspiro entre as frases,<br>
-                A pausa que dá sentido à música,<br>
-                O silêncio eloquente<br>
-                Que fala mais que mil discursos.
+                Você é essa estrela em minha vida,<br>
+                Essa luz que nunca se apaga,<br>
+                Essa presença que transforma<br>
+                Tudo em algo mais bonito.
             </div>
             <div class="poem-quote quote-right">"</div>
         </div>
 
         <section class="section">
             <div class="section-header">
-                <h2 class="fade-in">Palavras Reservadas</h2>
+                <h2 class="fade-in">Mensagem Especial</h2>
             </div>
             <div class="secret-container fade-in">
                 <button class="secret-button" id="secretBtn">
-                    <i class="fas fa-lock-open"></i> Revelar Promessa
+                    <i class="fas fa-gift"></i> Abrir Mensagem Especial
                 </button>
                 <div class="secret-message" id="secretMessage">
                     <div class="secret-text">
-                        <p>Meu Amor,</p>
-                        <p>Em um mundo de superfícies transitórias, você é a profundidade que sempre busquei. Não prometo perfeição - essa é uma ilusão que não nos cabe. Prometo autenticidade, presença e o compromisso diário de construir ao seu lado.</p>
-                        <p>Prometo ouvir não apenas suas palavras, mas os oceanos que habitam entre elas. Celebrar não apenas suas vitórias, mas a coragem que precede cada conquista. Aprender não apenas quem você é, mas quem está se tornando a cada amanhecer.</p>
-                        <p>Esta não é uma declaração de posse, mas de companheirismo. Não de dependência, mas de escolha consciente. Dia após dia, escolho caminhar ao seu lado, honrando a mulher extraordinária que você é.</p>
-                        <p style="margin-top: 30px; font-weight: bold; color: #ffb6c1;">Eternamente seu, em todos os tempos possíveis.</p>
+                        <p>Querida Duda,</p>
+                        <p>Quero que saiba o quanto você é importante para mim. Em um mundo que constantemente tenta nos definir por conquistas e aparências, você me lembra do valor das conexões verdadeiras.</p>
+                        <p>Sua amizade me ensinou que as melhores coisas da vida não são coisas, mas sim momentos compartilhados, risadas sinceras e silêncios confortáveis.</p>
+                        <p>Prometo continuar valorizando nossa amizade, celebrando suas conquistas como se fossem minhas, apoiando você nos desafios e sempre reservando um espaço especial em minha vida para você.</p>
+                        <p>Que nossa amizade continue crescendo, aprendendo e se fortalecendo com o tempo. Que possamos envelhecer juntas, acumulando memórias e histórias para contar.</p>
+                        <p style="margin-top: 30px; font-weight: bold; color: #64b4ff;">Com toda a gratidão e carinho do mundo,</p>
                     </div>
                 </div>
             </div>
@@ -723,14 +716,13 @@
 
         <footer>
             <div class="footer-glow"></div>
-            <div class="heart-pulse"><i class="fas fa-heart"></i></div>
-            <div class="signature fade-in">Com amor infinito</div>
-            <div class="closing fade-in">Algumas almas são como constelações - raras, brilhantes e destinadas a guiar nosso caminho para sempre.</div>
+            <div class="heart-pulse"><i class="fas fa-star"></i></div>
+            <div class="signature fade-in">Sua amiga para sempre</div>
+            <div class="closing fade-in">"A amizade duplica as alegrias e divide as tristezas." - Francis Bacon<br>Obrigada por fazer parte da minha jornada.</div>
         </footer>
     </div>
 
     <script>
-        // Criar partículas
         function createParticles() {
             const container = document.getElementById('particles');
             const particleCount = 40;
@@ -739,23 +731,19 @@
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
-                // Tamanho aleatório
                 const size = 2 + Math.random() * 5;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
-                // Posição aleatória
                 const left = Math.random() * 100;
                 particle.style.left = `${left}%`;
                 
-                // Atraso e duração aleatórios
                 const delay = Math.random() * 20;
                 const duration = 15 + Math.random() * 15;
                 
                 particle.style.animationDelay = `${delay}s`;
                 particle.style.animationDuration = `${duration}s`;
                 
-                // Opacidade aleatória
                 const opacity = 0.1 + Math.random() * 0.2;
                 particle.style.opacity = opacity;
                 
@@ -763,69 +751,68 @@
             }
         }
 
-        // Revelar mensagem secreta
-        document.getElementById('secretBtn').addEventListener('click', function() {
-            const secretMessage = document.getElementById('secretMessage');
-            secretMessage.style.display = 'block';
-            this.style.display = 'none';
-            
-            // Efeito de brilho na mensagem
-            secretMessage.style.animation = 'fadeInUp 0.8s ease';
-            
-            // Criar partículas extras
-            for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
-                    const particle = document.createElement('div');
-                    particle.classList.add('particle');
-                    particle.style.width = '3px';
-                    particle.style.height = '3px';
-                    particle.style.left = `${30 + Math.random() * 40}%`;
-                    particle.style.top = '50%';
-                    particle.style.background = 'rgba(255, 182, 193, 0.4)';
-                    particle.style.animationDuration = '3s';
-                    
-                    document.getElementById('particles').appendChild(particle);
-                    
-                    // Remover após animação
-                    setTimeout(() => {
-                        particle.remove();
-                    }, 3000);
-                }, i * 100);
-            }
-        });
-
-        // Observador para efeitos de entrada
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Inicialização
+        // Já personalizado com o nome "Duda"
         document.addEventListener('DOMContentLoaded', function() {
+            // O nome já está definido como "Duda" no HTML, então não precisa do prompt
+            // Mas mantemos a lógica caso queira mudar facilmente
+            
             createParticles();
             
-            // Observar elementos com classe fade-in
+            // Revelar mensagem secreta
+            document.getElementById('secretBtn').addEventListener('click', function() {
+                const secretMessage = document.getElementById('secretMessage');
+                secretMessage.style.display = 'block';
+                this.style.display = 'none';
+                
+                secretMessage.style.animation = 'fadeInUp 0.8s ease';
+                
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+                        particle.style.width = '3px';
+                        particle.style.height = '3px';
+                        particle.style.left = `${30 + Math.random() * 40}%`;
+                        particle.style.top = '50%';
+                        particle.style.background = 'rgba(100, 200, 255, 0.4)';
+                        particle.style.animationDuration = '3s';
+                        
+                        document.getElementById('particles').appendChild(particle);
+                        
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 3000);
+                    }, i * 100);
+                }
+            });
+            
+            // Observador para efeitos de entrada
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
             const fadeElements = document.querySelectorAll('.fade-in');
             fadeElements.forEach(el => {
                 observer.observe(el);
             });
 
-            // Efeito de digitação nas mensagens principais
+            // Efeito de digitação
             const messages = document.querySelectorAll('.message p');
             messages.forEach(p => {
                 const originalText = p.innerHTML;
                 p.innerHTML = '';
                 
                 let i = 0;
-                const speed = 20;
+                const speed = 30;
                 
                 const typeWriter = () => {
                     if (i < originalText.length) {
@@ -854,13 +841,13 @@
                     const icon = this.querySelector('.quality-icon i');
                     icon.style.transform = 'scale(1.3) rotate(10deg)';
                     icon.style.transition = 'transform 0.4s ease';
-                    icon.style.textShadow = '0 0 20px rgba(255, 182, 193, 0.8)';
+                    icon.style.textShadow = '0 0 20px rgba(100, 200, 255, 0.8)';
                 });
                 
                 item.addEventListener('mouseleave', function() {
                     const icon = this.querySelector('.quality-icon i');
                     icon.style.transform = 'scale(1) rotate(0deg)';
-                    icon.style.textShadow = '0 0 15px rgba(255, 182, 193, 0.5)';
+                    icon.style.textShadow = '0 0 15px rgba(100, 180, 255, 0.5)';
                 });
             });
         });
